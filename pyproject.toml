@@ -1,0 +1,23 @@
+[project]
+name = "solarian-umi-slim"
+version = "0.1.0"
+description = "A Solarian plugin."
+authors = [
+    {name = "Solarian Contributors", email = "solarian@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "solarian>=0.1.0",
+    # Add plugin-specific dependencies here (e.g. a hardware SDK).
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# Entry points below are managed by `solarian create-plugin`. Each component
+# type you scaffold adds its class(es) here so Solarian can discover them.
+
+[project.entry-points."solarian.modules"]
+umi-slim = "solarian_umi_slim.module:UmiSlimModule"
