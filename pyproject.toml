@@ -9,12 +9,26 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "solarian>=0.1.0",
-    # Add plugin-specific dependencies here (e.g. a hardware SDK).
+    "solarian-feetech>=0.1.0",  # single Feetech servo drives the gripper
 ]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["solarian_umi_slim*"]
+
+# Ship the simulation model with the wheel. The assets live inside the package
+# (`solarian_umi_slim/assets/`) so `MJCF_PATH` resolves from the installed
+# location. Only the runtime files are included -- onshape-export byproducts
+# (`*_raw.xml`, `scene.xml`, `meshes/*.part`) are intentionally left out.
+[tool.setuptools.package-data]
+solarian_umi_slim = [
+    "assets/umi_slim.xml",
+    "assets/umi_slim_description/config.json",
+    "assets/umi_slim_description/meshes/*.stl",
+]
 
 # Entry points below are managed by `solarian create-plugin`. Each component
 # type you scaffold adds its class(es) here so Solarian can discover them.

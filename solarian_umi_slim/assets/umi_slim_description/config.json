@@ -1,0 +1,14 @@
+{
+    "url": "https://cad.onshape.com/documents/517a50d1e5582bf4d5f0bfdf/w/7dbed727fa7bd55c2f836191/e/9b8a8e9375790442bc8c1201",
+    "output_format": "mujoco",
+    "output_filename": "umi_slim_raw",
+    "assets_directory": "meshes",
+    "robot_name": "umi_slim",
+    "draw_frames": false,
+    "no_dynamics": false,
+    "solarian": {
+        "output_xml": "../umi_slim.xml",
+        "meshdir": "umi_slim_description/meshes",
+        "density": 522
+    }
+}

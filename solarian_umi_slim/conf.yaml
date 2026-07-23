@@ -1,19 +1,40 @@
-# Default configuration for the UmiSlimModule.
+# Default configuration for the UmiSlimModule (parallel gripper, one Feetech servo).
 #
-# Copied into a project's conf/ directory by `solarian add-module`.
-# Edit the values below to match your hardware setup.
+# Copied into a project's conf/ directory by `solarian add-module`. Commands are
+# given as finger aperture in cm; the module converts to the servo's normalized
+# space, and each backend maps that to the physical target (real: calibration,
+# sim: the `sim:` block below).
 
-# Serial port / device address the module's bus connects to.
+# Serial port / device address the servo bus connects to.
 port: /dev/ttyUSB0
 
 # Control loop frequency (Hz).
-fps: 30
+frequency: 30
 
-# Per-component configuration keyed by the class-attribute names declared on
-# the module (e.g. actuator ids/models). Example:
-#
-# actuators:
-#   shoulder:
-#     id: 1
-#     model: sts3215
-#     mode: range_m100_100
+# Persisted servo calibration (recorded closed/open positions). Must match the
+# physical extremes described by aperture_closed_cm / aperture_open_cm.
+calibration_file: .cache/calibration/umi_slim_gripper.json
+
+# Physical finger aperture (fingertip separation) at the ends of travel.
+# Defaults measured from the exported MuJoCo model.
+aperture_closed_cm: 2.94
+aperture_open_cm: 13.84
+
+actuators:
+    gripper:
+        id: 1
+        model: sts3215
+        port: ${port}
+        type: feetech
+        mode: range_0_100
+        sim:
+            # Only this joint is actuated; onshape-to-robot's <equality>
+            # (ratio -1) drives the opposite finger. Prefix must match the
+            # ModuleAttachment prefix in the robot's scene.
+            joint: "gripper/left_manifold_to_rail"
+            actuator: "gripper/left_manifold_to_rail"
+            range_min: 0.0       # joint fully open  (fingers apart)
+            range_max: 0.0545    # joint fully closed (fingers together)
+            # Flip so normalized 0 -> closed (range_max), 100 -> open (range_min),
+            # matching aperture_closed_cm / aperture_open_cm.
+            drive_mode: 1
