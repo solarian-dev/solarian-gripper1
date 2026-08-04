@@ -66,25 +66,53 @@ class UmiSlimModule(Module):
             "I_Coefficient": 2,
             "D_Coefficient": 2,
         })
+        # Hold present before torque-on so a stale Goal_Position cannot slam
+        # the jaws into a hard stop on startup.
+        self._hold_present_pose()
         self.enable_torque()
+
+    # ---- safety hooks (see Robot.safety_arming) ----------------------------
+    def _hold_present_pose(self) -> None:
+        """Set the gripper goal to its present position (no jump on torque-on).
+
+        Bypasses ``write_actuators`` (gated while disarmed) by writing the bus
+        directly.
+        """
+        present = self.read_sensors(PosData, ["gripper"])
+        self.module_bus.write(
+            {"gripper": PosData(value=present["gripper"]["value"])}, normalize=True
+        )
+
+    def enter_safe_hold(self) -> None:
+        """Hold the gripper where it is until armed (no jump on power-up)."""
+        self._hold_present_pose()
+        self.enable_torque()
+
+    def on_arm(self) -> None:
+        """Re-hold + re-enable torque so arming never jumps the gripper."""
+        self._hold_present_pose()
+        self.enable_torque()
+
+    def on_disarm(self) -> None:
+        pass
 
     # ---- aperture <-> normalized command -----------------------------------
     def aperture_to_norm(self, aperture_cm: float) -> float:
-        """Map a finger aperture (cm) to the servo's normalized command [0, 100].
+        """Map a finger aperture (cm) to the servo's normalized command [-100, 100].
 
-        0 -> fully closed (``aperture_closed_cm``), 100 -> fully open
+        -100 -> fully closed (``aperture_closed_cm``), 100 -> fully open
         (``aperture_open_cm``). Clamped to the valid range.
         """
         lo, hi = self.cfg.aperture_closed_cm, self.cfg.aperture_open_cm
         if hi == lo:
-            return 0.0
-        norm = (aperture_cm - lo) / (hi - lo) * 100.0
-        return max(0.0, min(100.0, norm))
+            return -100.0
+        norm = (aperture_cm - lo) / (hi - lo) * 200.0 - 100.0
+        return max(-100.0, min(100.0, norm))
 
     def norm_to_aperture(self, norm: float) -> float:
-        """Inverse of :meth:`aperture_to_norm` (normalized [0, 100] -> cm)."""
+        """Inverse of :meth:`aperture_to_norm` (normalized [-100, 100] -> cm)."""
         lo, hi = self.cfg.aperture_closed_cm, self.cfg.aperture_open_cm
-        return lo + (norm / 100.0) * (hi - lo)
+        return lo + ((norm + 100.0) / 200.0) * (hi - lo)
 
     def read_aperture_cm(self) -> float:
         """Current finger aperture in cm, read back from the servo/sim joint."""

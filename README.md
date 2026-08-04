@@ -70,8 +70,10 @@ class MyRobot(Robot):
 ```
 
 2. Copy `conf.yaml` into your project's `conf/` (e.g. via `solarian add-module`)
-   and set the real `port`/`id`, then calibrate the servo so its closed/open
-   positions match `aperture_closed_cm` / `aperture_open_cm`.
+   and set the real `port`/`id`, then run `solarian calibrate-module` on the
+   gripper: sweep the full closed↔open travel (homing offset stays 0; no horn
+   remount needed), then move to the **closed** pose when asked for the low
+   command end so `drive_mode` matches `aperture_closed_cm` / `aperture_open_cm`.
 
 3. Command the gripper by aperture in cm — send a waypoint whose `gripper` value
    is the aperture (e.g. `13.8` = fully open, `2.9` = closed). Read the current
@@ -86,4 +88,4 @@ class MyRobot(Robot):
   keep them consistent with the servo calibration and the `sim:` joint range.
 - `actuators.gripper.sim` — maps the servo to `gripper/left_manifold_to_rail`,
   `range_min: 0.0` / `range_max: 0.0545` (the joint limits), `drive_mode: 1` so
-  normalized 0 = closed, 100 = open.
+  normalized -100 = closed, 100 = open.

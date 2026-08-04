@@ -26,15 +26,15 @@ actuators:
         model: sts3215
         port: ${port}
         type: feetech
-        mode: range_0_100
+        mode: range_m100_100
         sim:
             # Only this joint is actuated; onshape-to-robot's <equality>
             # (ratio -1) drives the opposite finger. Prefix must match the
             # ModuleAttachment prefix in the robot's scene.
             joint: "gripper/left_manifold_to_rail"
             actuator: "gripper/left_manifold_to_rail"
-            range_min: 0.0       # joint fully open  (fingers apart)
-            range_max: 0.0545    # joint fully closed (fingers together)
-            # Flip so normalized 0 -> closed (range_max), 100 -> open (range_min),
+            range_min: 0 # joint fully open  (fingers apart)
+            range_max: 0.0545 # joint fully closed (fingers together)
+            # Flip so normalized -100 -> closed (range_max), 100 -> open (range_min),
             # matching aperture_closed_cm / aperture_open_cm.
             drive_mode: 1
