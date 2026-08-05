@@ -3,8 +3,10 @@
   <compiler angle="radian" meshdir="umi_slim_description/meshes" autolimits="true" inertiafromgeom="auto" inertiagrouprange="3 3" />
   <default>
     <default class="umi_slim">
-      <joint frictionloss="0.1" armature="0.005" />
-      <position kp="50" dampratio="1" />
+      <joint frictionloss="0.1" armature="0.005" solreflimit="0.002 1" solimplimit="0.95 0.99 0.001 0.5 2" />
+      <!-- Higher kp + harder joint limits so open/close endpoints settle quickly
+           instead of creeping into MuJoCo soft limits. -->
+      <position kp="500" dampratio="1" />
       <default class="visual">
         <geom type="mesh" contype="0" conaffinity="0" group="2" />
       </default>

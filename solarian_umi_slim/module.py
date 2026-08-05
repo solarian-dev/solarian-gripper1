@@ -18,12 +18,15 @@ Because the module always emits the *same* normalized value to
 ``write_actuators``, real and sim stay consistent as long as their endpoints
 (calibration open/closed vs. the ``sim:`` range) describe the same physical
 apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
+
+Trajectory upsampling uses the core Module scalar path
+(``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT`` apertures
+are interpolated at the module rate, then converted cm → normalized on write.
 """
 
 from solarian.core.module import Module
 from solarian.core.configs import ModuleConfig
 from solarian.core.data import PosData
-from solarian.core.action import ActionType, ModuleAction, action_handler
 from solarian_feetech.actuator import FeetechServo
 
 
@@ -47,12 +50,12 @@ class UmiSlimModule(Module):
     config_class = UmiSlimConfig
 
     # Single logical actuator, matching the single physical Feetech servo.
+    # Declared so the core scalar interpolator knows which field to drive.
+    scalar_actuator = "gripper"
     gripper = FeetechServo()
 
     def initialize(self):
         super().initialize()
-
-        self.target = None
 
         # Gentle position-control gains for the gripper servo. These are no-ops
         # in simulation (the MuJoCo world ignores hardware config writes).
@@ -119,16 +122,9 @@ class UmiSlimModule(Module):
         pos = self.read_sensors(PosData, ["gripper"])
         return self.norm_to_aperture(pos["gripper"]["value"])
 
-    # ---- control loop ------------------------------------------------------
-    def control_step(self):
-        if self.target is not None:
-            self.write_actuators({"gripper": PosData(value=self.target)})
-            self.target = None
+    # Scalar interpolator works in aperture (cm); convert at the write/seed edge.
+    def _scalar_to_actuator(self, value: float) -> float:
+        return self.aperture_to_norm(value)
 
-    @action_handler(ActionType.SCHEDULE_WAYPOINT)
-    def _handle_schedule_waypoint(self, action: ModuleAction, t_now: float) -> bool:
-        """Accept a waypoint whose ``gripper`` value is an **aperture in cm**."""
-        field = action.values().get("gripper")
-        if field is not None:
-            self.target = self.aperture_to_norm(field.value)
-        return True
+    def _actuator_to_scalar(self, value: float) -> float:
+        return self.norm_to_aperture(value)
