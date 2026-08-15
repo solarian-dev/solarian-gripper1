@@ -19,12 +19,12 @@ Because the module always emits the *same* normalized value to
 (calibration open/closed vs. the ``sim:`` range) describe the same physical
 apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
 
-Trajectory upsampling uses the core Module scalar path
+Trajectory upsampling uses the core GripperModule scalar path
 (``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT`` apertures
 are interpolated at the module rate, then converted cm → normalized on write.
 """
 
-from solarian.core.module import Module
+from solarian.core.gripper_module import GripperModule
 from solarian.core.configs import ModuleConfig
 from solarian.core.data import PosData
 from solarian_feetech.actuator import FeetechServo
@@ -46,7 +46,7 @@ class UmiSlimConfig(ModuleConfig):
     aperture_open_cm: float = 13.84
 
 
-class UmiSlimModule(Module):
+class UmiSlimModule(GripperModule):
     config_class = UmiSlimConfig
 
     # Single logical actuator, matching the single physical Feetech servo.
