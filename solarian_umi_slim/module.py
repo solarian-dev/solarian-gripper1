@@ -22,6 +22,7 @@ apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
 Trajectory upsampling uses the core GripperModule scalar path
 (``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT`` apertures
 are interpolated at the module rate, then converted cm → normalized on write.
+``SET_HOME`` drives the jaws to ``aperture_open_cm`` (fully open).
 """
 
 from solarian.core.gripper_module import GripperModule
@@ -53,6 +54,11 @@ class UmiSlimModule(GripperModule):
     # Declared so the core scalar interpolator knows which field to drive.
     scalar_actuator = "gripper"
     gripper = FeetechServo()
+
+    @property
+    def home_value(self) -> float:
+        """SET_HOME target: fully open finger aperture in cm."""
+        return float(self.cfg.aperture_open_cm)
 
     def initialize(self):
         super().initialize()
