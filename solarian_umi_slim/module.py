@@ -20,31 +20,42 @@ Because the module always emits the *same* normalized value to
 apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
 
 Trajectory upsampling uses the core GripperModule scalar path
-(``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT`` apertures
-are interpolated at the module rate, then converted cm → normalized on write.
+(``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT``
+apertures are in **centimetres**, interpolated at the module rate, then
+converted to normalized servo ``[-100, 100]`` on write.
 ``SET_HOME`` drives the jaws to ``aperture_open_cm`` (fully open).
 """
+
+from logging import getLogger
 
 from solarian.core.gripper_module import GripperModule
 from solarian.core.configs import ModuleConfig
 from solarian.core.data import PosData
 from solarian_feetech.actuator import FeetechServo
+from solarian_umi_slim.aperture import (
+    APERTURE_CLOSED_CM,
+    APERTURE_OPEN_CM,
+    aperture_to_norm as cm_to_norm,
+    norm_to_aperture as norm_to_cm,
+    resolve_aperture_limits,
+)
+
+logger = getLogger("module")
 
 
 class UmiSlimConfig(ModuleConfig):
     """Config for the UMI-slim gripper.
 
-    ``aperture_closed_cm`` / ``aperture_open_cm`` define the physical finger
-    aperture (fingertip separation) at the two ends of travel. They are the
-    single source of truth for the ``cm <-> normalized`` conversion and must
-    correspond to the same physical extremes as the servo calibration and the
-    ``sim:`` joint range. Defaults are the fingertip separations measured on the
-    exported model (joint 0.0 m = open, 0.0545 m = closed).
+    ``aperture_closed_cm`` / ``aperture_open_cm`` are the physical finger
+    aperture (fingertip separation) at the two ends of travel. They must
+    match the servo calibration and the ``sim:`` joint range. Defaults are
+    ruler measurements (fully closed 0 cm, fully open 8.5 cm). The old CAD
+    pair 2.94 / 13.84 is rejected at conversion time.
     """
 
     calibration_file: str | None = None
-    aperture_closed_cm: float = 2.94
-    aperture_open_cm: float = 13.84
+    aperture_closed_cm: float = APERTURE_CLOSED_CM
+    aperture_open_cm: float = APERTURE_OPEN_CM
 
 
 class UmiSlimModule(GripperModule):
@@ -55,13 +66,41 @@ class UmiSlimModule(GripperModule):
     scalar_actuator = "gripper"
     gripper = FeetechServo()
 
+    def _aperture_limits(self) -> tuple[float, float]:
+        return resolve_aperture_limits(
+            getattr(self.cfg, "aperture_closed_cm", None),
+            getattr(self.cfg, "aperture_open_cm", None),
+        )
+
     @property
     def home_value(self) -> float:
         """SET_HOME target: fully open finger aperture in cm."""
-        return float(self.cfg.aperture_open_cm)
+        return self._aperture_limits()[1]
 
     def initialize(self):
         super().initialize()
+        lo, hi = self._aperture_limits()
+        open_norm = self.aperture_to_norm(hi)
+        if abs(open_norm - 100.0) > 0.5:
+            logger.error(
+                "UmiSlim '%s': %.2f cm should map to servo 100, got %.1f "
+                "(limits %.2f–%.2f). Restart run-robot so this process loads "
+                "the current plugin.",
+                self.name,
+                hi,
+                open_norm,
+                lo,
+                hi,
+            )
+        logger.info(
+            "UmiSlim '%s': aperture %.2f–%.2f cm ↔ servo -100–100 "
+            "(%.2f cm → %.1f)",
+            self.name,
+            lo,
+            hi,
+            hi,
+            open_norm,
+        )
 
         # Gentle position-control gains for the gripper servo. These are no-ops
         # in simulation (the MuJoCo world ignores hardware config writes).
@@ -109,19 +148,16 @@ class UmiSlimModule(GripperModule):
     def aperture_to_norm(self, aperture_cm: float) -> float:
         """Map a finger aperture (cm) to the servo's normalized command [-100, 100].
 
-        -100 -> fully closed (``aperture_closed_cm``), 100 -> fully open
-        (``aperture_open_cm``). Clamped to the valid range.
+        -100 -> fully closed, 100 -> fully open. Legacy CAD limits (2.94 / 13.84)
+        are ignored so an 8.5 cm command cannot collapse to servo ~2.
         """
-        lo, hi = self.cfg.aperture_closed_cm, self.cfg.aperture_open_cm
-        if hi == lo:
-            return -100.0
-        norm = (aperture_cm - lo) / (hi - lo) * 200.0 - 100.0
-        return max(-100.0, min(100.0, norm))
+        lo, hi = self._aperture_limits()
+        return cm_to_norm(aperture_cm, lo, hi)
 
     def norm_to_aperture(self, norm: float) -> float:
         """Inverse of :meth:`aperture_to_norm` (normalized [-100, 100] -> cm)."""
-        lo, hi = self.cfg.aperture_closed_cm, self.cfg.aperture_open_cm
-        return lo + ((norm + 100.0) / 200.0) * (hi - lo)
+        lo, hi = self._aperture_limits()
+        return norm_to_cm(norm, lo, hi)
 
     def read_aperture_cm(self) -> float:
         """Current finger aperture in cm, read back from the servo/sim joint."""

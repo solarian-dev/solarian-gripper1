@@ -16,9 +16,9 @@ frequency: 30
 calibration_file: .cache/calibration/umi_slim_gripper.json
 
 # Physical finger aperture (fingertip separation) at the ends of travel.
-# Defaults measured from the exported MuJoCo model.
-aperture_closed_cm: 2.94
-aperture_open_cm: 13.84
+# Ruler measurement on the real gripper: 8.5 cm fully open.
+aperture_closed_cm: -1.0
+aperture_open_cm: 8.5
 
 actuators:
     gripper:

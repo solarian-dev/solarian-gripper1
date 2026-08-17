@@ -6,6 +6,8 @@ A plugin for the Solarian robotics framework.
 
 from pathlib import Path
 
+from solarian_umi_slim.aperture import APERTURE_CLOSED_CM, APERTURE_OPEN_CM
+
 __version__ = "0.1.0"
 
 #: Directory holding this plugin's simulation assets (MJCF + meshes). Shipped
@@ -19,4 +21,10 @@ ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 #: resolved relative to this file) straight from the installed plugin.
 MJCF_PATH = str(ASSETS_DIR / "umi_slim.xml")
 
-__all__ = ["ASSETS_DIR", "MJCF_PATH", "__version__"]
+__all__ = [
+    "ASSETS_DIR",
+    "MJCF_PATH",
+    "APERTURE_CLOSED_CM",
+    "APERTURE_OPEN_CM",
+    "__version__",
+]
