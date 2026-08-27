@@ -9,7 +9,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "solarian>=0.1.0",
-    "solarian-feetech>=0.1.0",  # single Feetech servo drives the gripper
+    "solarian-feetech>=0.1.0",    # Feetech STS variant
+    "solarian-robstride>=0.1.0",  # Robstride L7 variant
 ]
 
 [build-system]
@@ -19,19 +20,25 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 include = ["solarian_umi_slim*"]
 
-# Ship the simulation model with the wheel. The assets live inside the package
-# (`solarian_umi_slim/assets/`) so `MJCF_PATH` resolves from the installed
-# location. Only the runtime files are included -- onshape-export byproducts
-# (`*_raw.xml`, `scene.xml`, `meshes/*.part`) are intentionally left out.
+# Ship the simulation models with the wheel. The assets live inside the package
+# (`solarian_umi_slim/assets/`) so `MJCF_FEETECH_PATH` / `MJCF_ROBSTRIDE_PATH`
+# resolve from the installed location. Only the runtime files are included --
+# onshape-export byproducts (`*_raw.xml`, `scene.xml`, `meshes/*.part`) are
+# intentionally left out.
 [tool.setuptools.package-data]
 solarian_umi_slim = [
     "assets/umi_slim.xml",
     "assets/umi_slim_description/config.json",
     "assets/umi_slim_description/meshes/*.stl",
+    "assets/umi_slim_robstride.xml",
+    "assets/umi_slim_robstride_description/config.json",
+    "assets/umi_slim_robstride_description/meshes/*.stl",
 ]
 
 # Entry points below are managed by `solarian create-plugin`. Each component
 # type you scaffold adds its class(es) here so Solarian can discover them.
 
 [project.entry-points."solarian.modules"]
-umi-slim = "solarian_umi_slim.module:UmiSlimModule"
+umi-slim = "solarian_umi_slim.umi_slim_feetech:UmiSlimFeetechModule"
+umi-slim-feetech = "solarian_umi_slim.umi_slim_feetech:UmiSlimFeetechModule"
+umi-slim-robstride = "solarian_umi_slim.umi_slim_robstride:UmiSlimRobstrideModule"

@@ -1,0 +1,14 @@
+{
+    "url": "https://cad.onshape.com/documents/5fbd7547dd7daafc3a6e92e9/w/7b637b106665c730fa38ff07/e/c7d198a7cdc94f82848be227",
+    "output_format": "mujoco",
+    "output_filename": "umi_slim_robstride_raw",
+    "assets_directory": "meshes",
+    "robot_name": "umi_slim_robstride",
+    "draw_frames": false,
+    "no_dynamics": false,
+    "solarian": {
+        "output_xml": "../umi_slim_robstride.xml",
+        "meshdir": "umi_slim_robstride_description/meshes",
+        "density": 522
+    }
+}

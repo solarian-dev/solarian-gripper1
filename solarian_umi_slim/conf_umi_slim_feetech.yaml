@@ -1,4 +1,4 @@
-# Default configuration for the UmiSlimModule (parallel gripper, one Feetech servo).
+# Default configuration for UmiSlimFeetechModule (parallel gripper, one Feetech servo).
 #
 # Copied into a project's conf/ directory by `solarian add-module`. Commands are
 # given as finger aperture in cm; the module converts to the servo's normalized
@@ -10,6 +10,7 @@ port: /dev/ttyUSB0
 
 # Control loop frequency (Hz).
 frequency: 30
+interpolator_type: scalar
 
 # Persisted servo calibration (recorded closed/open positions). Must match the
 # physical extremes described by aperture_closed_cm / aperture_open_cm.

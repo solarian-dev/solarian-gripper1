@@ -1,0 +1,42 @@
+# Default configuration for UmiSlimRobstrideModule (parallel gripper, one Robstride L7).
+#
+# Copied into a project's conf/ directory by `solarian add-module`. Commands are
+# given as finger aperture in cm; the module converts to the servo's normalized
+# space, and each backend maps that to the physical target (real: calibration,
+# sim: the `sim:` block below).
+
+# Serial port / device address the servo bus connects to.
+port: /dev/ttyUSB0
+
+# Control loop frequency (Hz).
+frequency: 30
+interpolator_type: scalar
+max_speed: 8.0
+
+# Persisted servo calibration (recorded closed/open positions). Must match the
+# physical extremes described by aperture_closed_cm / aperture_open_cm.
+calibration_file: .cache/calibration/umi_slim_robstride_gripper.json
+
+# Physical finger aperture (fingertip separation) at the ends of travel.
+# Same finger travel as the Feetech UMI-slim: 8.5 cm fully open.
+aperture_closed_cm: -1.0
+aperture_open_cm: 8.5
+
+actuators:
+    gripper:
+        id: 7
+        model: el05
+        port: ${port}
+        type: robstride
+        mode: range_m100_100
+        sim:
+            # Only this joint is actuated; onshape-to-robot's <equality>
+            # (ratio -1) drives the opposite finger. Prefix must match the
+            # ModuleAttachment prefix in the robot's scene.
+            joint: "gripper/left_manifold_to_rail"
+            actuator: "gripper/left_manifold_to_rail"
+            range_min: 0 # joint fully open  (fingers apart)
+            range_max: 0.0545 # joint fully closed (fingers together)
+            # Flip so normalized -100 -> closed (range_max), 100 -> open (range_min),
+            # matching aperture_closed_cm / aperture_open_cm.
+            drive_mode: 1
