@@ -22,8 +22,8 @@ apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
 Trajectory upsampling uses the core GripperModule scalar path
 (``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT``
 apertures are in **centimetres**, interpolated at the module rate, then
-converted to normalized servo ``[-100, 100]`` on write.
-``SET_HOME`` drives the jaws to ``aperture_open_cm`` (fully open).
+converted to normalized servo ``[-100, 100]`` on write, bounded by
+``aperture_closed_cm`` / ``aperture_open_cm``.
 """
 
 from logging import getLogger
@@ -73,8 +73,8 @@ class UmiSlimFeetechModule(GripperModule):
         )
 
     @property
-    def home_value(self) -> float:
-        """SET_HOME target: fully open finger aperture in cm."""
+    def open_value(self) -> float:
+        """Open end of travel: fully open finger aperture in cm."""
         return self._aperture_limits()[1]
 
     def initialize(self):
@@ -119,13 +119,9 @@ class UmiSlimFeetechModule(GripperModule):
         self._hold_present_pose()
         self.enable_torque()
 
-    # ---- safety hooks (see Robot.safety_arming) ----------------------------
+    # ---- safety hooks (called by the align-ik CLI) -------------------------
     def _hold_present_pose(self) -> None:
-        """Set the gripper goal to its present position (no jump on torque-on).
-
-        Bypasses ``write_actuators`` (gated while disarmed) by writing the bus
-        directly.
-        """
+        """Set the gripper goal to its present position (no jump on torque-on)."""
         present = self.read_sensors(PosData, ["gripper"])
         self.module_bus.write(
             {"gripper": PosData(value=present["gripper"]["value"])}, normalize=True
