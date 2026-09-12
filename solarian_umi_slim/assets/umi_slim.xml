@@ -15,67 +15,68 @@
   </default>
   <worldbody>
     <body name="servo" pos="0 0 0" quat="1 0 0 0" childclass="umi_slim">
-      <geom type="mesh" class="visual" pos="0.000274137 0.00198828 0" quat="1 0 0 -0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
-      <geom type="mesh" class="collision" pos="0.000274137 0.00198828 0" quat="1 0 0 -0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
-      <geom type="mesh" class="visual" pos="0.0125 -0.0041 -0" quat="0 0 0.707107 0.707107" mesh="servo" material="servo_material" />
-      <geom type="mesh" class="collision" pos="0.0125 -0.0041 -0" quat="0 0 0.707107 0.707107" mesh="servo" material="servo_material" />
-      <geom type="mesh" class="visual" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rail" material="rail_material" />
-      <geom type="mesh" class="collision" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rail" material="rail_material" />
-      <geom type="mesh" class="visual" pos="-0 0.00198828 0" quat="0.707107 0 0.707107 0" mesh="camera_mount_so100_bottom" material="camera_mount_so100_bottom_material" />
-      <geom type="mesh" class="collision" pos="-0 0.00198828 0" quat="0.707107 0 0.707107 0" mesh="camera_mount_so100_bottom" material="camera_mount_so100_bottom_material" />
-      <geom type="mesh" class="visual" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rack" material="rack_material" />
-      <geom type="mesh" class="collision" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rack" material="rack_material" />
-      <geom type="mesh" class="visual" pos="0.020835 -0.0185 -0.01971" quat="1 0 0 0" mesh="sts3215_double_side_bracket" material="sts3215_double_side_bracket_material" />
-      <geom type="mesh" class="collision" pos="0.020835 -0.0185 -0.01971" quat="1 0 0 0" mesh="sts3215_double_side_bracket" material="sts3215_double_side_bracket_material" />
-      <geom type="mesh" class="visual" pos="-0.134 0.11165 2.638e-09" quat="0.5 0.5 0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
-      <geom type="mesh" class="collision" pos="-0.134 0.11165 2.638e-09" quat="0.5 0.5 0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
-      <geom type="mesh" class="visual" pos="0.0106903 0.00726021 0.0797357" quat="0 -0 -0.707107 0.707107" mesh="board" material="board_material" />
-      <geom type="mesh" class="collision" pos="0.0106903 0.00726021 0.0797357" quat="0 -0 -0.707107 0.707107" mesh="board" material="board_material" />
-      <geom type="mesh" class="visual" pos="0.000190305 0.00740021 0.0847157" quat="0 -0 0 1" mesh="lens" material="lens_material" />
-      <geom type="mesh" class="collision" pos="0.000190305 0.00740021 0.0847157" quat="0 -0 0 1" mesh="lens" material="lens_material" />
-      <site group="3" name="camera" pos="0.000190305 -0.00629979 0.0847157" quat="0.707107 0.707107 -0 -0" />
-      <site group="3" name="bracket" pos="0.03306 -0.03465 -0.02921" quat="0.707107 0.707107 -0 0" />
+      <geom type="mesh" class="visual" pos="0.000274137 1.23964e-05 -0.025" quat="1 0 -0 0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
+      <geom type="mesh" class="collision" pos="0.000274137 1.23964e-05 -0.025" quat="1 0 -0 0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
+      <geom type="mesh" class="visual" pos="-0 -0.0041 -0.0125" quat="0.5 -0.5 -0.5 -0.5" mesh="servo" material="servo_material" />
+      <geom type="mesh" class="collision" pos="-0 -0.0041 -0.0125" quat="0.5 -0.5 -0.5 -0.5" mesh="servo" material="servo_material" />
+      <geom type="mesh" class="visual" pos="-0 0.11165 -0.134" quat="0.707107 -0 0 0.707107" mesh="rail" material="rail_material" />
+      <geom type="mesh" class="collision" pos="-0 0.11165 -0.134" quat="0.707107 -0 0 0.707107" mesh="rail" material="rail_material" />
+      <geom type="mesh" class="visual" pos="0 0.11165 -0.134" quat="0.707107 -0 0 0.707107" mesh="rack" material="rack_material" />
+      <geom type="mesh" class="collision" pos="0 0.11165 -0.134" quat="0.707107 -0 0 0.707107" mesh="rack" material="rack_material" />
+      <geom type="mesh" class="visual" pos="8.94e-10 1.23964e-05 -0.025" quat="1 0 -0 0" mesh="camera_mount_so100_bottom" material="camera_mount_so100_bottom_material" />
+      <geom type="mesh" class="collision" pos="8.94e-10 1.23964e-05 -0.025" quat="1 0 -0 0" mesh="camera_mount_so100_bottom" material="camera_mount_so100_bottom_material" />
+      <geom type="mesh" class="visual" pos="-0.0390864 0.235526 0.318481" quat="0 -0 0.999999 -0.00172817" mesh="so100_6dof_wrist_roll_to_gripper" material="so100_6dof_wrist_roll_to_gripper_material" />
+      <geom type="mesh" class="collision" pos="-0.0390864 0.235526 0.318481" quat="0 -0 0.999999 -0.00172817" mesh="so100_6dof_wrist_roll_to_gripper" material="so100_6dof_wrist_roll_to_gripper_material" />
+      <geom type="mesh" class="visual" pos="-0.134 0.11165 0" quat="0.5 0.5 0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
+      <geom type="mesh" class="collision" pos="-0.134 0.11165 0" quat="0.5 0.5 0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
+      <geom type="mesh" class="visual" pos="0.0106903 0.00528433 0.0547357" quat="0 -0 -0.707107 0.707107" mesh="board" material="board_material" />
+      <geom type="mesh" class="collision" pos="0.0106903 0.00528433 0.0547357" quat="0 -0 -0.707107 0.707107" mesh="board" material="board_material" />
+      <geom type="mesh" class="visual" pos="0.000190306 0.00542433 0.0597157" quat="0 -0 0 1" mesh="lens" material="lens_material" />
+      <geom type="mesh" class="collision" pos="0.000190306 0.00542433 0.0597157" quat="0 -0 0 1" mesh="lens" material="lens_material" />
+      <site group="3" name="camera" pos="0.000190306 -0.00827567 0.0597157" quat="0.707107 0.707107 -0 -0" />
+      <site group="3" name="flange" pos="0 0.0131025 -0" quat="0 -0 -0.707107 0.707107" />
+      <site group="3" name="tcp" pos="0 -0.19259 0" quat="0 0 -0.707107 0.707107" />
       <body name="right_carriage" pos="-0.085 -0.0578 0.0035" quat="0.5 -0.5 -0.5 0.5">
-        <joint axis="0 0 1" name="right_manifold_to_rail" type="slide" range="-0.054500000000000014 -1.3877787807814457e-17" />
+        <joint axis="0 0 1" name="right_manifold_to_rail" type="slide" range="-0.05450000000000004 -4.163336342344337e-17" />
         <geom type="mesh" class="visual" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
         <geom type="mesh" class="collision" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
-        <geom type="mesh" class="visual" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 -0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        <geom type="mesh" class="collision" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 -0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        <geom type="mesh" class="visual" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 0" mesh="right_carriage" material="right_carriage_material" />
-        <geom type="mesh" class="collision" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 0" mesh="right_carriage" material="right_carriage_material" />
+        <geom type="mesh" class="visual" pos="-0.0114878 -0.0174 -0.030504" quat="0 0.707107 0 0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom type="mesh" class="collision" pos="-0.0114878 -0.0174 -0.030504" quat="0 0.707107 0 0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom type="mesh" class="visual" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 -0 -0" mesh="right_carriage" material="right_carriage_material" />
+        <geom type="mesh" class="collision" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 -0 -0" mesh="right_carriage" material="right_carriage_material" />
       </body>
       <body name="left_carriage" pos="0.085 -0.0578 0.0035" quat="0.5 -0.5 -0.5 0.5">
-        <joint axis="0 0 1" name="left_manifold_to_rail" type="slide" range="-1.3877787807814457e-17 0.054499999999999986" />
-        <geom type="mesh" class="visual" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 0" mesh="left_carriage" material="left_carriage_material" />
-        <geom type="mesh" class="collision" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 0" mesh="left_carriage" material="left_carriage_material" />
-        <geom type="mesh" class="visual" pos="-0.0114878 0.0162 0.030504" quat="0.707107 -0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        <geom type="mesh" class="collision" pos="-0.0114878 0.0162 0.030504" quat="0.707107 -0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <joint axis="0 0 1" name="left_manifold_to_rail" type="slide" range="-4.163336342344337e-17 0.05449999999999996" />
+        <geom type="mesh" class="visual" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 -0 -0" mesh="left_carriage" material="left_carriage_material" />
+        <geom type="mesh" class="collision" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 -0 -0" mesh="left_carriage" material="left_carriage_material" />
+        <geom type="mesh" class="visual" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom type="mesh" class="collision" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
         <geom type="mesh" class="visual" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
         <geom type="mesh" class="collision" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
       </body>
     </body>
   </worldbody>
   <asset>
-    <mesh file="board.stl" />
-    <mesh file="servo.stl" />
-    <mesh file="sts3215_double_side_bracket.stl" />
-    <mesh file="feetech_gripper_holder.stl" />
-    <mesh file="right_carriage.stl" />
-    <mesh file="soft_gripper_finger.stl" />
-    <mesh file="lens.stl" />
-    <mesh file="finger_holder_right_n.stl" />
-    <mesh file="rack.stl" />
     <mesh file="finger_holder_left_n.stl" />
+    <mesh file="servo.stl" />
     <mesh file="camera_mount_so100_bottom.stl" />
+    <mesh file="board.stl" />
     <mesh file="left_carriage.stl" />
+    <mesh file="lens.stl" />
+    <mesh file="feetech_gripper_holder.stl" />
     <mesh file="rail.stl" />
+    <mesh file="right_carriage.stl" />
+    <mesh file="finger_holder_right_n.stl" />
+    <mesh file="so100_6dof_wrist_roll_to_gripper.stl" />
     <mesh file="camera_mount_so100_top.stl" />
+    <mesh file="soft_gripper_finger.stl" />
+    <mesh file="rack.stl" />
     <material name="camera_mount_so100_top_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="servo_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
-    <material name="camera_mount_so100_bottom_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="rack_material" rgba="0.972549 0.529412 0.00392157 1" />
-    <material name="sts3215_double_side_bracket_material" rgba="0.329412 0.329412 0.329412 1" />
+    <material name="camera_mount_so100_bottom_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="so100_6dof_wrist_roll_to_gripper_material" rgba="0.372549 0.654902 0.239216 1" />
     <material name="feetech_gripper_holder_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="board_material" rgba="1 1 1 1" />
     <material name="lens_material" rgba="0.333333 0.333333 0.333333 1" />

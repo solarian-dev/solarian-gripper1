@@ -81,15 +81,30 @@ class MyRobot(Robot):
 ```
 
 For the Robstride variant, import `UmiSlimRobstrideModule` and
-`MJCF_ROBSTRIDE_PATH` instead. The Robstride MJCF attaches at the `base` site
-(the Feetech MJCF uses `bracket`).
+`MJCF_ROBSTRIDE_PATH` instead. The Feetech MJCF attaches at the `flange` site;
+the Robstride MJCF attaches at the `base` site.
+
+The Feetech MJCF exports CAD Frames as sites: `flange` (mate to the arm),
+`camera` (wrist lens), and `tcp` (tool center point). IK should track
+`prefix + "tcp"` after the gripper is attached.
+
+Site-mate example (SO-106 and this gripper both export a `flange` Frame):
+
+```python
+ModuleAttachment(
+    module="right_gripper",
+    mjcf=UMI_SLIM_MJCF,
+    parent_site="right/flange",
+    child_site="flange",
+    prefix="right_gripper/",
+)
+```
 
 2. Copy the matching yaml (`conf_umi_slim_feetech.yaml` or
    `conf_umi_slim_robstride.yaml`) into your project's `conf/` and set the real
-   `port`/`id`, then run `solarian calibrate-module` on the gripper: sweep the
-   full closed↔open travel (homing offset stays 0; no horn remount needed), then
-   move to the **closed** pose when asked for the low command end so `drive_mode`
-   matches `aperture_closed_cm` / `aperture_open_cm`.
+   `port`/`id`, then run `solarian calibrate` on the gripper: sweep the
+   full closed↔open travel, then move to the **fully closed** pose when asked
+   so `drive_mode` matches `aperture_closed_cm` / `aperture_open_cm`.
 
 3. Command the gripper by aperture in cm — send a waypoint whose `gripper` value
    is the aperture (e.g. `8.5` = fully open, `0.0` = closed). Read the current
