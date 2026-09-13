@@ -85,8 +85,9 @@ For the Robstride variant, import `UmiSlimRobstrideModule` and
 the Robstride MJCF attaches at the `base` site.
 
 The Feetech MJCF exports CAD Frames as sites: `flange` (mate to the arm),
-`camera` (wrist lens), and `tcp` (tool center point). IK should track
-`prefix + "tcp"` after the gripper is attached.
+`camera` (wrist lens), and `tcp` (tool center point). Pass
+`UmiSlimFeetechModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
+the flange plus that CAD offset.
 
 Site-mate example (SO-106 and this gripper both export a `flange` Frame):
 

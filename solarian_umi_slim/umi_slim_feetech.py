@@ -31,6 +31,7 @@ from logging import getLogger
 from solarian.core.gripper_module import GripperModule
 from solarian.core.configs import ModuleConfig
 from solarian.core.data import PosData
+from solarian.core.ik import FrameOffset
 from solarian_feetech.actuator import FeetechServo
 from solarian_umi_slim.aperture import (
     APERTURE_CLOSED_CM,
@@ -59,6 +60,13 @@ class UmiSlimFeetechConfig(ModuleConfig):
 
 class UmiSlimFeetechModule(GripperModule):
     config_class = UmiSlimFeetechConfig
+
+    # CAD ``tcp`` in the mate ``flange`` frame (umi_slim.xml sibling sites).
+    # Identity rotation: both sites share the same quat; TCP is +Z of flange.
+    tcp_from_flange = FrameOffset(
+        pos=(0.0, 0.0, 0.2056925),
+        quat=(1.0, 0.0, 0.0, 0.0),
+    )
 
     # Single logical actuator, matching the single physical Feetech servo.
     # Declared so the core scalar interpolator knows which field to drive.
