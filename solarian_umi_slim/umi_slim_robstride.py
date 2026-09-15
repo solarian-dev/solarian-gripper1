@@ -14,7 +14,7 @@ actuator backend differs.
   opposite finger, so a single command opens/closes both jaws symmetrically.
 
 Trajectory upsampling uses the core GripperModule scalar path
-(``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_WAYPOINT``
+(``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_J`` / ``MOVE_J`` / ``SERVO_J``
 apertures are in **centimetres**, interpolated at the module rate, then
 converted to normalized servo ``[-100, 100]`` on write, bounded by
 ``aperture_closed_cm`` / ``aperture_open_cm``.
@@ -109,11 +109,11 @@ class UmiSlimRobstrideModule(GripperModule):
 
     # ---- safety hooks (called by the align-ik CLI) -------------------------
     def _hold_present_pose(self) -> None:
-        """Set the gripper goal to its present position (no jump on torque-on)."""
-        present = self.read_sensors(PosData, ["gripper"])
+        """Latch Goal to the raw encoder so torque-on cannot slam."""
+        present = self.read_sensors(PosData, ["gripper"], normalize=False)
         self.module_bus.write(
             {"gripper": PosData(value=present["gripper"]["value"])},
-            normalize=True,
+            normalize=False,
         )
 
     def enter_safe_hold(self) -> None:
