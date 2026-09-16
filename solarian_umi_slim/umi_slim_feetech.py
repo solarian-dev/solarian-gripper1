@@ -2,7 +2,8 @@
 UmiSlim Feetech Module
 
 A parallel gripper driven by a single Feetech servo. It is commanded by the
-desired **finger aperture in centimetres**; the module translates that aperture
+desired **finger aperture in millimetres**; the core
+:class:`~solarian.core.gripper_module.GripperModule` translates that aperture
 into the servo's normalized command space, which each backend then maps to the
 physical target:
 
@@ -17,45 +18,50 @@ physical target:
 Because the module always emits the *same* normalized value to
 ``write_actuators``, real and sim stay consistent as long as their endpoints
 (yaml ``real_range_*`` vs. ``sim_range_*``) describe the same physical
-apertures configured here as ``aperture_open_cm`` / ``aperture_closed_cm``.
+apertures configured here as ``aperture_open_mm`` / ``aperture_closed_mm``.
 
 Trajectory upsampling uses the core GripperModule scalar path
 (``interpolator_type: scalar`` in yaml): sparse ``SCHEDULE_J`` / ``MOVE_J`` / ``SERVO_J``
-apertures are in **centimetres**, interpolated at the module rate, then
-converted to normalized servo ``[-100, 100]`` on write, bounded by
-``aperture_closed_cm`` / ``aperture_open_cm``.
+apertures are in **millimetres**, interpolated at the module rate, then
+converted to normalized servo ``[-100, 100]`` on write.
 """
 
 from logging import getLogger
 
-from solarian.core.gripper_module import GripperModule
-from solarian.core.configs import ModuleConfig
+from pydantic import model_validator
+
+from solarian.core.gripper_module import GripperConfig, GripperModule
 from solarian.core.data import PosData
 from solarian.core.ik import FrameOffset
 from solarian_feetech.actuator import FeetechServo
 from solarian_umi_slim.aperture import (
-    APERTURE_CLOSED_CM,
-    APERTURE_OPEN_CM,
-    aperture_to_norm as cm_to_norm,
-    norm_to_aperture as norm_to_cm,
+    APERTURE_CLOSED_MM,
+    APERTURE_OPEN_MM,
     resolve_aperture_limits,
 )
 
 logger = getLogger("module")
 
 
-class UmiSlimFeetechConfig(ModuleConfig):
+class UmiSlimFeetechConfig(GripperConfig):
     """Config for the Feetech-actuated UMI-slim gripper.
 
-    ``aperture_closed_cm`` / ``aperture_open_cm`` are the physical finger
+    ``aperture_closed_mm`` / ``aperture_open_mm`` are the physical finger
     aperture (fingertip separation) at the two ends of travel. They must
     match the servo calibration and the ``sim_range_*`` joint range. Defaults are
-    ruler measurements (fully closed 0 cm, fully open 8.5 cm). The old CAD
-    pair 2.94 / 13.84 is rejected at conversion time.
+    ruler measurements (fully closed 0 mm, fully open 85 mm). The old CAD
+    pair 29.4 / 138.4 is replaced on load.
     """
 
-    aperture_closed_cm: float = APERTURE_CLOSED_CM
-    aperture_open_cm: float = APERTURE_OPEN_CM
+    aperture_closed_mm: float = APERTURE_CLOSED_MM
+    aperture_open_mm: float = APERTURE_OPEN_MM
+
+    @model_validator(mode="after")
+    def _reject_legacy_cad_limits(self) -> "UmiSlimFeetechConfig":
+        self.aperture_closed_mm, self.aperture_open_mm = resolve_aperture_limits(
+            self.aperture_closed_mm, self.aperture_open_mm
+        )
+        return self
 
 
 class UmiSlimFeetechModule(GripperModule):
@@ -73,40 +79,16 @@ class UmiSlimFeetechModule(GripperModule):
     scalar_actuator = "gripper"
     gripper = FeetechServo(model="sts3215")
 
-    def _aperture_limits(self) -> tuple[float, float]:
-        return resolve_aperture_limits(
-            getattr(self.cfg, "aperture_closed_cm", None),
-            getattr(self.cfg, "aperture_open_cm", None),
-        )
-
-    @property
-    def open_value(self) -> float:
-        """Open end of travel: fully open finger aperture in cm."""
-        return self._aperture_limits()[1]
-
     def initialize(self):
         super().initialize()
-        lo, hi = self._aperture_limits()
-        open_norm = self.aperture_to_norm(hi)
-        if abs(open_norm - 100.0) > 0.5:
-            logger.error(
-                "UmiSlim Feetech '%s': %.2f cm should map to servo 100, got %.1f "
-                "(limits %.2f–%.2f). Restart run-robot so this process loads "
-                "the current plugin.",
-                self.name,
-                hi,
-                open_norm,
-                lo,
-                hi,
-            )
+        lo, hi = self.scalar_limits()
+        source = "measured table" if self.cfg.aperture_table else "linear endpoints"
         logger.info(
-            "UmiSlim Feetech '%s': aperture %.2f–%.2f cm ↔ servo -100–100 "
-            "(%.2f cm → %.1f)",
+            "UmiSlim Feetech '%s': aperture %.1f–%.1f mm ↔ servo -100–100 (%s)",
             self.name,
             lo,
             hi,
-            hi,
-            open_norm,
+            source,
         )
 
         # Gentle position-control gains for the gripper servo. These are no-ops
@@ -147,33 +129,6 @@ class UmiSlimFeetechModule(GripperModule):
 
     def on_disarm(self) -> None:
         pass
-
-    # ---- aperture <-> normalized command -----------------------------------
-    def aperture_to_norm(self, aperture_cm: float) -> float:
-        """Map a finger aperture (cm) to the servo's normalized command [-100, 100].
-
-        -100 -> fully closed, 100 -> fully open. Legacy CAD limits (2.94 / 13.84)
-        are ignored so an 8.5 cm command cannot collapse to servo ~2.
-        """
-        lo, hi = self._aperture_limits()
-        return cm_to_norm(aperture_cm, lo, hi)
-
-    def norm_to_aperture(self, norm: float) -> float:
-        """Inverse of :meth:`aperture_to_norm` (normalized [-100, 100] -> cm)."""
-        lo, hi = self._aperture_limits()
-        return norm_to_cm(norm, lo, hi)
-
-    def read_aperture_cm(self) -> float:
-        """Current finger aperture in cm, read back from the servo/sim joint."""
-        pos = self.read_sensors(PosData, ["gripper"])
-        return self.norm_to_aperture(pos["gripper"]["value"])
-
-    # Scalar interpolator works in aperture (cm); convert at the write/seed edge.
-    def _scalar_to_actuator(self, value: float) -> float:
-        return self.aperture_to_norm(value)
-
-    def _actuator_to_scalar(self, value: float) -> float:
-        return self.norm_to_aperture(value)
 
 
 # Historical names used before the Feetech/Robstride split.

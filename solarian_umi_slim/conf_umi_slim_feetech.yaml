@@ -1,7 +1,7 @@
 # Default configuration for UmiSlimFeetechModule (parallel gripper, one Feetech servo).
 #
 # Copied into a project's conf/ directory by `solarian add-module`. Commands are
-# given as finger aperture in cm; the module converts to the servo's normalized
+# given as finger aperture in mm; the module converts to the servo's normalized
 # space, and each backend maps that to the physical target (real: yaml
 # real_range_*; sim: sim_joint / sim_range_* below).
 
@@ -13,9 +13,9 @@ frequency: 30
 interpolator_type: scalar
 
 # Physical finger aperture (fingertip separation) at the ends of travel.
-# Ruler measurement on the real gripper: 8.5 cm fully open.
-aperture_closed_cm: -1.0
-aperture_open_cm: 8.5
+# Ruler measurement on the real gripper: 85 mm fully open.
+aperture_closed_mm: -10.0
+aperture_open_mm: 85.0
 
 actuators:
     gripper:
@@ -29,5 +29,5 @@ actuators:
         sim_range_min: 0 # joint fully open  (fingers apart)
         sim_range_max: 0.0545 # joint fully closed (fingers together)
         # Flip so normalized -100 -> closed (range_max), 100 -> open (range_min),
-        # matching aperture_closed_cm / aperture_open_cm.
+        # matching aperture_closed_mm / aperture_open_mm.
         sim_drive_mode: 1

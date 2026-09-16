@@ -2,7 +2,7 @@
 solarian-umi-slim
 
 A plugin for the Solarian robotics framework. Ships two parallel-gripper
-modules that share the same finger kinematics and aperture (cm) command
+modules that share the same finger kinematics and aperture (mm) command
 space, differing only in the driving actuator:
 
 * Feetech STS — ``UmiSlimFeetechModule`` / ``assets/umi_slim.xml``
@@ -11,7 +11,7 @@ space, differing only in the driving actuator:
 
 from pathlib import Path
 
-from solarian_umi_slim.aperture import APERTURE_CLOSED_CM, APERTURE_OPEN_CM
+from solarian_umi_slim.aperture import APERTURE_CLOSED_MM, APERTURE_OPEN_MM
 
 __version__ = "0.1.0"
 
@@ -35,7 +35,7 @@ __all__ = [
     "MJCF_PATH",
     "MJCF_FEETECH_PATH",
     "MJCF_ROBSTRIDE_PATH",
-    "APERTURE_CLOSED_CM",
-    "APERTURE_OPEN_CM",
+    "APERTURE_CLOSED_MM",
+    "APERTURE_OPEN_MM",
     "__version__",
 ]

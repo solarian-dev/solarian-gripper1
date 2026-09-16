@@ -1,7 +1,7 @@
 # solarian-umi-slim
 
 A parallel gripper module for the Solarian framework. Two fingers, one actuator;
-you command it by the desired **finger aperture in centimetres** and the module
+you command it by the desired **finger aperture in millimetres** and the module
 handles the conversion for both real hardware and simulation.
 
 The plugin ships **two actuator variants** that share the same finger kinematics
@@ -22,7 +22,7 @@ pip install -e .
 ## How it works
 
 - Each module exposes a single actuator (`gripper`), matching the single
-  physical servo. It converts an aperture command (cm) into the servo's
+  physical servo. It converts an aperture command (mm) into the servo's
   normalized command space and writes that. Each backend maps normalized → physical:
   - **Real**: normalized → servo counts via the actuator calibration.
   - **Sim**: normalized → the `left_manifold_to_rail` prismatic joint via the
@@ -105,20 +105,29 @@ ModuleAttachment(
    `conf_umi_slim_robstride.yaml`) into your project's `conf/` and set the real
    `port`/`id`, then run `solarian calibrate` on the gripper: sweep the
    full closed↔open travel, then move to the **fully closed** pose when asked
-   so `drive_mode` matches `aperture_closed_cm` / `aperture_open_cm`.
+   so `drive_mode` matches `aperture_closed_mm` / `aperture_open_mm`.
 
-3. Command the gripper by aperture in cm — send a waypoint whose `gripper` value
-   is the aperture (e.g. `8.5` = fully open, `0.0` = closed). Read the current
-   aperture with `module.read_aperture_cm()`.
+3. Run `solarian calibrate-gripper-ranges` and read a ruler at each stop. This
+   records `aperture_table`, the measured aperture curve. Skipping it leaves the
+   module interpolating a straight line between the two endpoints, which the
+   linkage does not follow.
+
+4. Command the gripper by aperture in mm — send a waypoint whose `gripper` value
+   is the aperture (e.g. `85` = fully open, `0` = closed). Read the current
+   aperture with `module.read_aperture()`.
 
 ## Configuration
 
 Fields specific to both modules:
 
-- `aperture_closed_cm` / `aperture_open_cm` — physical fingertip separation at
-  the two ends of travel. Single source of truth for the cm ↔ normalized map;
-  keep them consistent with the servo calibration and the `sim:` joint range.
+- `aperture_table` — ruler-measured `norm` / `aperture_mm` pairs written by
+  `solarian calibrate-gripper-ranges`. When present it defines the travel and
+  the mm ↔ normalized map, superseding the two endpoint fields below.
+- `aperture_closed_mm` / `aperture_open_mm` — physical fingertip separation at
+  the two ends of travel, used for a straight-line map until a table is
+  measured. Keep them consistent with the servo calibration and the `sim:`
+  joint range.
 - `actuators.gripper.sim` — maps the servo to `gripper/left_manifold_to_rail`,
   `range_min: 0.0` / `range_max: 0.0545` (the joint limits), `drive_mode: 1` so
   normalized -100 = closed, 100 = open.
-- `interpolator_type: scalar` — GripperModule interpolates aperture in cm.
+- `interpolator_type: scalar` — GripperModule interpolates aperture in mm.
