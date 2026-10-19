@@ -13,6 +13,14 @@ dependencies = [
     "solarian-robstride>=0.1.0",  # Robstride L7 variant
 ]
 
+[project.optional-dependencies]
+# The servo SDKs, for the machine wired to the gripper. Without them the
+# modules still import, so a relay or controller can build the robot's schema.
+hardware = [
+    "solarian-feetech[hardware]>=0.1.0",
+    "solarian-robstride[hardware]>=0.1.0",
+]
+
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
