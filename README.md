@@ -131,3 +131,9 @@ Fields specific to both modules:
   `range_min: 0.0` / `range_max: 0.0545` (the joint limits), `drive_mode: 1` so
   normalized -100 = closed, 100 = open.
 - `interpolator_type: scalar` — GripperModule interpolates aperture in mm.
+
+## License
+
+[Apache License 2.0](LICENSE). Copyright 2026 PrimaryKey Inc. See [NOTICE](NOTICE).
+
+Solarian and the Solarian logo are trademarks of PrimaryKey Inc. See the [trademark policy](https://github.com/solarian-dev/solarian/blob/main/TRADEMARKS.md).

@@ -4,12 +4,57 @@
   <default>
     <default class="umi_slim">
       <joint frictionloss="0.1" armature="0.005" />
-      <position kp="50" dampratio="1" />
+      <!-- N/m on the carriage slide: stiff like the real STS3250, so the
+           carriage reaches the command (within ~1 mm) through fingertip drag on
+           the table. The squeeze on an object is set by finger_flex, not this. -->
+      <position kp="5000" dampratio="1" />
+      <!-- Lumped TPU fin-ray compliance: each finger hinges outward about the
+           base of its inner face on a torsion spring, so the carriage keeps
+           closing after the pads meet an object, as on the real gripper. The
+           policies learned from that: real grasps keep closing to a ~20 mm
+           reading, and with rigid fingers the carriages stall at the object
+           width, which the place policy reads (off the finger holders, see
+           screw_hole) as already releasing.
+           A hinge rather than a slide because the real finger's base is clamped
+           to its carriage; only the part out toward the tip gives.
+           4.8 N m/rad is ~400 N/m at a block held near the tips (0.11 m out),
+           tuned, not measured: the reading tracks the command within ~1.5 mm
+           under load (the real gripper's ~0.6 mm), and a 12 g block or 60 g
+           motor stays put through a 6-8 mm partial reopen (the place policy's
+           first chunks). Stiffer only raises the squeeze. -->
+      <default class="finger_flex">
+        <joint type="hinge" axis="0 1 0" stiffness="4.8" damping="0.01" springref="0" frictionloss="0.01" armature="0.0001" />
+      </default>
       <default class="visual">
         <geom type="mesh" contype="0" conaffinity="0" group="2" />
+        <!-- The three screw holes on each finger holder's top face, located by
+             casting the camera rays through the dark holes in a real wrist frame.
+             Real, they are dark marks moving with the fingers, and the place
+             policy reads the opening off them: with the CAD's light bosses it
+             read the sim gripper 10-15 mm wider than its reading and kept
+             opening until the block fell. MuJoCo has no ambient occlusion, so a
+             hole renders as bright as the face around it. -->
+        <default class="screw_hole">
+          <geom type="cylinder" size="0.0018 0.00015" quat="0.707107 0.707107 0 0" material="screw_hole" />
+        </default>
       </default>
       <default class="collision">
         <geom group="3" density="522" contype="2" conaffinity="1" />
+        <!-- Fingers are padded with 3M TB641 gripping material. Its datasheet
+             mu of 3.5 is against its mating 3M material; a Shore 40A elastomer
+             on wood or plastic is ~1-1.5. Priority makes these parameters govern
+             every pad contact instead of being mixed with the other geom's.
+             MuJoCo's default contact (solref 0.02, solimp dmax 0.95) is a spring
+             whose stiffness scales with the bodies' mass: ~500 N/m against a 12 g
+             block, so the pads sank 5-11 mm into the block instead of the
+             fingers flexing. A 0.004 s time constant (2 x timestep, the
+             stiffest MuJoCo allows) with dmax 0.99 is ~100 times stiffer.
+             Torsional friction (m, needs condim 4) is the pad's contact patch
+             resisting a block pivoting about the line between the fingers:
+             ~2/3 of a 15 mm patch radius times mu. -->
+        <default class="finger_pad">
+          <geom condim="4" friction="1.5 0.02 0.0001" priority="1" solref="0.004 1" solimp="0.95 0.99 0.001" />
+        </default>
       </default>
     </default>
   </default>
@@ -40,8 +85,15 @@
         <joint axis="0 0 1" name="right_manifold_to_rail" type="slide" range="-0.054500000000000014 -1.3877787807814457e-17" />
         <geom type="mesh" class="visual" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
         <geom type="mesh" class="collision" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
-        <geom type="mesh" class="visual" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        <geom type="mesh" class="collision" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="screw_hole" pos="-0.0343 -0.0157 -0.0033" />
+        <geom class="screw_hole" pos="-0.0047 -0.0157 -0.0019" />
+        <geom class="screw_hole" pos="-0.0046 -0.0157 -0.0287" />
+        <body name="right_finger">
+          <joint name="right_finger_flex" class="finger_flex" pos="-0.013 0 -0.0305" range="0 0.35" />
+          <geom type="mesh" class="visual" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+          <geom type="box" class="visual" pos="-0.0739 -0.0006 -0.0308" size="0.0609 0.009 0.0003" material="tb641_pad" />
+          <geom type="mesh" class="finger_pad" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        </body>
         <geom type="mesh" class="visual" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 -0" mesh="right_carriage" material="right_carriage_material" />
         <geom type="mesh" class="collision" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 -0" mesh="right_carriage" material="right_carriage_material" />
       </body>
@@ -49,10 +101,17 @@
         <joint axis="0 0 1" name="left_manifold_to_rail" type="slide" range="0.0 0.0545" />
         <geom type="mesh" class="visual" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 -0" mesh="left_carriage" material="left_carriage_material" />
         <geom type="mesh" class="collision" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 -0" mesh="left_carriage" material="left_carriage_material" />
-        <geom type="mesh" class="visual" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        <geom type="mesh" class="collision" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <body name="left_finger">
+          <joint name="left_finger_flex" class="finger_flex" pos="-0.013 0 0.0305" range="-0.35 0" />
+          <geom type="mesh" class="visual" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+          <geom type="box" class="visual" pos="-0.0739 -0.0006 0.0308" size="0.0609 0.009 0.0003" material="tb641_pad" />
+          <geom type="mesh" class="finger_pad" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        </body>
         <geom type="mesh" class="visual" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
         <geom type="mesh" class="collision" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
+        <geom class="screw_hole" pos="-0.0363 -0.0157 -0.0027" />
+        <geom class="screw_hole" pos="-0.0054 -0.0157 -0.0037" />
+        <geom class="screw_hole" pos="-0.0047 -0.0157 0.0249" />
       </body>
     </body>
   </worldbody>
@@ -71,20 +130,27 @@
     <mesh file="soft_gripper_finger.stl" />
     <mesh file="right_carriage.stl" />
     <mesh file="left_carriage.stl" />
+    <!-- The parts in the wrist camera's view (rack, finger holders, fingers,
+         carriages, pads) take the median colour of each part in a real wrist
+         frame under the so106 sim lighting, not the CAD export's colours. -->
     <material name="camera_mount_so100_top_material" rgba="0.8 0.8 0.8 1" />
     <material name="servo_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="horn_spacer_3_5_mm_material" rgba="0.8 0.8 0.8 1" />
     <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
     <material name="feetech_camera_mount_bottom_material" rgba="0.917647 0.917647 0.917647 1" />
     <material name="feetech_back_holder_to_horn_material" rgba="0.8 0.8 0.8 1" />
-    <material name="rack_material" rgba="0.972549 0.529412 0.00392157 1" />
+    <material name="rack_material" rgba="0.39 0.45 0.6 1" />
     <material name="raspberry_pi_hq_camera_material" rgba="0.172549 0.188235 0.203922 1" />
     <material name="feetech_gripper_holder_material" rgba="0.301961 0.301961 0.301961 1" />
-    <material name="finger_holder_right_n_material" rgba="0.917647 0.917647 0.917647 1" />
-    <material name="soft_gripper_finger_material" rgba="0.972549 0.529412 0.00392157 1" />
-    <material name="right_carriage_material" rgba="0.615686 0.811765 0.929412 1" />
-    <material name="left_carriage_material" rgba="0.615686 0.811765 0.929412 1" />
-    <material name="finger_holder_left_n_material" rgba="0.917647 0.917647 0.917647 1" />
+    <material name="finger_holder_right_n_material" rgba="1 0.95 0.9 1" emission="0.07" />
+    <material name="soft_gripper_finger_material" rgba="1 0.27 0.024 1" />
+    <material name="right_carriage_material" rgba="0.9 1 1 1" />
+    <material name="left_carriage_material" rgba="0.9 1 1 1" />
+    <material name="finger_holder_left_n_material" rgba="1 0.95 0.9 1" emission="0.07" />
+    <!-- The 3M TB641 strip on each finger's inner face, dark in every real
+         wrist frame along the gap between the fingers. -->
+    <material name="tb641_pad" rgba="0.35 0.42 0.38 1" />
+    <material name="screw_hole" rgba="0.08 0.08 0.08 1" />
   </asset>
   <actuator>
     <position class="umi_slim" name="left_manifold_to_rail" joint="left_manifold_to_rail" inheritrange="1" />

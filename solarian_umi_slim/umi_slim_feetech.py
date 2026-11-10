@@ -70,7 +70,7 @@ class UmiSlimFeetechModule(GripperModule):
     # CAD ``tcp`` in the mate ``flange`` frame (umi_slim.xml sibling sites).
     # Identity rotation: both sites share the same quat; TCP is +Z of flange.
     tcp_from_flange = FrameOffset(
-        pos=(0.0, 0.0, 0.2056925),
+        pos=(0.0, 0.0, 0.19824),
         quat=(1.0, 0.0, 0.0, 0.0),
     )
 
