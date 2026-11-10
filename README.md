@@ -89,7 +89,7 @@ The Feetech MJCF exports CAD Frames as sites: `flange` (mate to the arm),
 `UmiSlimFeetechModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
 the flange plus that CAD offset.
 
-Site-mate example (SO-106 and this gripper both export a `flange` Frame):
+Site-mate example (Solarian Arm 1 and this gripper both export a `flange` Frame):
 
 ```python
 ModuleAttachment(
@@ -135,5 +135,7 @@ Fields specific to both modules:
 ## License
 
 [Apache License 2.0](LICENSE). Copyright 2026 PrimaryKey Inc. See [NOTICE](NOTICE).
+
+UMI Slim is an independent gripper designed with reference to the open [Universal Manipulation Interface](https://umi-gripper.github.io/) (UMI) project. It is not affiliated with, sponsored by, or endorsed by UMI, its authors, Stanford University, Columbia University or Toyota Research Institute.
 
 Solarian and the Solarian logo are trademarks of PrimaryKey Inc. See the [trademark policy](https://github.com/solarian-dev/solarian/blob/main/TRADEMARKS.md).

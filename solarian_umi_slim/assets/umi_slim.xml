@@ -132,7 +132,7 @@
     <mesh file="left_carriage.stl" />
     <!-- The parts in the wrist camera's view (rack, finger holders, fingers,
          carriages, pads) take the median colour of each part in a real wrist
-         frame under the so106 sim lighting, not the CAD export's colours. -->
+         frame under the arm1 sim lighting, not the CAD export's colours. -->
     <material name="camera_mount_so100_top_material" rgba="0.8 0.8 0.8 1" />
     <material name="servo_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="horn_spacer_3_5_mm_material" rgba="0.8 0.8 0.8 1" />
