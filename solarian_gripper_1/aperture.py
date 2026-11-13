@@ -1,4 +1,4 @@
-"""Physical fingertip aperture at the UMI-slim servo ends.
+"""Physical fingertip aperture at the solarian-gripper1 servo ends.
 
 Ruler measurement on the real gripper: fully closed = 0 mm, fully open = 85 mm.
 

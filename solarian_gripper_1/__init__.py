@@ -1,17 +1,17 @@
 """
-solarian-umi-slim
+solarian-gripper1
 
 A plugin for the Solarian robotics framework. Ships two parallel-gripper
 modules that share the same finger kinematics and aperture (mm) command
 space, differing only in the driving actuator:
 
-* Feetech STS — ``UmiSlimFeetechModule`` / ``assets/umi_slim.xml``
-* Robstride L7 — ``UmiSlimRobstrideModule`` / ``assets/umi_slim_robstride.xml``
+* Feetech STS — ``Gripper1FeetechModule`` / ``assets/gripper1.xml``
+* Robstride L7 — ``Gripper1RobstrideModule`` / ``assets/gripper1_robstride.xml``
 """
 
 from pathlib import Path
 
-from solarian_umi_slim.aperture import APERTURE_CLOSED_MM, APERTURE_OPEN_MM
+from solarian_gripper_1.aperture import APERTURE_CLOSED_MM, APERTURE_OPEN_MM
 
 __version__ = "0.1.0"
 
@@ -22,10 +22,10 @@ __version__ = "0.1.0"
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
 #: Absolute path to the Feetech-actuated gripper's attachable MJCF.
-MJCF_FEETECH_PATH = str(ASSETS_DIR / "umi_slim.xml")
+MJCF_FEETECH_PATH = str(ASSETS_DIR / "gripper1.xml")
 
 #: Absolute path to the Robstride-actuated gripper's attachable MJCF.
-MJCF_ROBSTRIDE_PATH = str(ASSETS_DIR / "umi_slim_robstride.xml")
+MJCF_ROBSTRIDE_PATH = str(ASSETS_DIR / "gripper1_robstride.xml")
 
 #: Historical alias for the Feetech model. Prefer ``MJCF_FEETECH_PATH``.
 MJCF_PATH = MJCF_FEETECH_PATH

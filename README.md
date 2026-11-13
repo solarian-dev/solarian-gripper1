@@ -1,4 +1,4 @@
-# solarian-umi-slim
+# solarian-gripper1
 
 A parallel gripper module for the Solarian framework. Two fingers, one actuator;
 you command it by the desired **finger aperture in millimetres** and the module
@@ -9,14 +9,22 @@ and aperture command space:
 
 | Variant | Module | Default config | MJCF |
 | --- | --- | --- | --- |
-| Feetech STS | `UmiSlimFeetechModule` | `conf_umi_slim_feetech.yaml` | `assets/umi_slim.xml` |
-| Robstride L7 | `UmiSlimRobstrideModule` | `conf_umi_slim_robstride.yaml` | `assets/umi_slim_robstride.xml` |
+| Feetech STS | `Gripper1FeetechModule` | `conf_gripper_feetech.yaml` | `assets/gripper1.xml` |
+| Robstride L7 | `Gripper1RobstrideModule` | `conf_gripper_robstride.yaml` | `assets/gripper1_robstride.xml` |
 
 ## Installation
 
 ```bash
-cd solarian-umi-slim
-pip install -e .
+pip install solarian-gripper1             # Feetech variant
+pip install "solarian-gripper1[hardware]" # plus the Feetech servo SDK, on the machine wired to the gripper
+```
+
+The Robstride variant needs `solarian-robstride`, which is not on PyPI yet.
+Install it from source alongside the gripper:
+
+```bash
+pip install -e "plugins/solarian-robstride[hardware]"
+pip install -e "plugins/solarian-gripper1[robstride]"
 ```
 
 ## How it works
@@ -38,16 +46,16 @@ relation). Re-export after a CAD change with:
 
 ```bash
 # Feetech
-solarian onshape-export plugins/solarian-umi-slim/solarian_umi_slim/assets/umi_slim_description
-solarian onshape-export plugins/solarian-umi-slim/solarian_umi_slim/assets/umi_slim_description --clean-only
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_description
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_description --clean-only
 
 # Robstride
-solarian onshape-export plugins/solarian-umi-slim/solarian_umi_slim/assets/umi_slim_robstride_description
-solarian onshape-export plugins/solarian-umi-slim/solarian_umi_slim/assets/umi_slim_robstride_description --clean-only
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_robstride_description
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_robstride_description --clean-only
 ```
 
-The Feetech export writes `solarian_umi_slim/assets/umi_slim.xml`; the Robstride
-export writes `solarian_umi_slim/assets/umi_slim_robstride.xml`. The driven joint
+The Feetech export writes `solarian_gripper_1/assets/gripper1.xml`; the Robstride
+export writes `solarian_gripper_1/assets/gripper1_robstride.xml`. The driven joint
 `left_manifold_to_rail` has range `[0, 0.0545]` m (0 = fingers apart / open,
 0.0545 = fingers together / closed).
 
@@ -58,12 +66,12 @@ export writes `solarian_umi_slim/assets/umi_slim_robstride.xml`. The driven join
 
 ```python
 from solarian.sim import SceneConfig, ModuleAttachment
-from solarian_umi_slim import MJCF_FEETECH_PATH as UMI_SLIM_MJCF
-from solarian_umi_slim.umi_slim_feetech import UmiSlimFeetechModule
+from solarian_gripper_1 import MJCF_FEETECH_PATH as GRIPPER_MJCF
+from solarian_gripper_1.gripper_feetech import Gripper1FeetechModule
 
 class MyRobot(Robot):
     is_sim = True
-    gripper = UmiSlimFeetechModule()
+    gripper = Gripper1FeetechModule()
 
     scene = SceneConfig(
         attachments=[
@@ -72,7 +80,7 @@ class MyRobot(Robot):
                 # Loaded straight from the installed plugin (meshes resolve
                 # relative to the MJCF) -- no need to copy the model into your
                 # project, so there's a single source of truth.
-                mjcf=UMI_SLIM_MJCF,
+                mjcf=GRIPPER_MJCF,
                 parent_body="right/wrist_flange",   # the arm flange body
                 prefix="gripper/",
             ),
@@ -80,29 +88,29 @@ class MyRobot(Robot):
     )
 ```
 
-For the Robstride variant, import `UmiSlimRobstrideModule` and
+For the Robstride variant, import `Gripper1RobstrideModule` and
 `MJCF_ROBSTRIDE_PATH` instead. The Feetech MJCF attaches at the `flange` site;
 the Robstride MJCF attaches at the `base` site.
 
 The Feetech MJCF exports CAD Frames as sites: `flange` (mate to the arm),
 `camera` (wrist lens), and `tcp` (tool center point). Pass
-`UmiSlimFeetechModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
+`Gripper1FeetechModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
 the flange plus that CAD offset.
 
-Site-mate example (Solarian Arm 1 and this gripper both export a `flange` Frame):
+Site-mate example (solarian-arm1 and this gripper both export a `flange` Frame):
 
 ```python
 ModuleAttachment(
     module="right_gripper",
-    mjcf=UMI_SLIM_MJCF,
+    mjcf=GRIPPER_MJCF,
     parent_site="right/flange",
     child_site="flange",
     prefix="right_gripper/",
 )
 ```
 
-2. Copy the matching yaml (`conf_umi_slim_feetech.yaml` or
-   `conf_umi_slim_robstride.yaml`) into your project's `conf/` and set the real
+2. Copy the matching yaml (`conf_gripper_feetech.yaml` or
+   `conf_gripper_robstride.yaml`) into your project's `conf/` and set the real
    `port`/`id`, then run `solarian calibrate` on the gripper: sweep the
    full closed↔open travel, then move to the **fully closed** pose when asked
    so `drive_mode` matches `aperture_closed_mm` / `aperture_open_mm`.
@@ -134,8 +142,15 @@ Fields specific to both modules:
 
 ## License
 
-[Apache License 2.0](LICENSE). Copyright 2026 PrimaryKey Inc. See [NOTICE](NOTICE).
-
-UMI Slim is an independent gripper designed with reference to the open [Universal Manipulation Interface](https://umi-gripper.github.io/) (UMI) project. It is not affiliated with, sponsored by, or endorsed by UMI, its authors, Stanford University, Columbia University or Toyota Research Institute.
+[Apache License 2.0](LICENSE). Copyright 2026 PrimaryKey Inc. Parts of the
+mechanical design and meshes in `solarian_gripper_1/assets/` are derived from
+the [UMI Gripper](https://cad.onshape.com/documents/a8a98201374f5cc9c6538790)
+and [UMI Soft Finger](https://cad.onshape.com/documents/c8d06048fc2e425772f2749c)
+of the [Universal Manipulation Interface](https://umi-gripper.github.io/) (UMI)
+project, and the Robstride L7 drive from RobStride's
+[EDULITE_A3](https://github.com/RobStride/EDULITE_A3) (MIT), and modified; see
+[NOTICE](NOTICE). solarian-gripper1 is not affiliated with, sponsored by, or
+endorsed by UMI, its authors, Stanford University, Columbia University, Toyota
+Research Institute or RobStride.
 
 Solarian and the Solarian logo are trademarks of PrimaryKey Inc. See the [trademark policy](https://github.com/solarian-dev/solarian/blob/main/TRADEMARKS.md).

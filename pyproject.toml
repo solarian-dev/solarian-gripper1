@@ -1,7 +1,7 @@
 [project]
-name = "solarian-umi-slim"
+name = "solarian-gripper1"
 version = "0.1.0"
-description = "A Solarian plugin."
+description = "solarian-gripper1, a single-actuator parallel gripper with a wrist camera, designed with reference to UMI"
 authors = [
     {name = "Raul Garreta", email = "raul@solarian.dev"}
 ]
@@ -11,16 +11,19 @@ classifiers = ["License :: OSI Approved :: Apache Software License"]
 requires-python = ">=3.10"
 dependencies = [
     "solarian>=0.1.0",
-    "solarian-feetech>=0.1.0",    # Feetech STS variant
-    "solarian-robstride>=0.1.0",  # Robstride L7 variant
+    "solarian-feetech>=0.1.0",
 ]
 
 [project.optional-dependencies]
+# Only Gripper1RobstrideModule imports solarian_robstride, so the Feetech
+# variant installs and runs without it.
+robstride = [
+    "solarian-robstride>=0.1.0",
+]
 # The servo SDKs, for the machine wired to the gripper. Without them the
 # modules still import, so a relay or controller can build the robot's schema.
 hardware = [
     "solarian-feetech[hardware]>=0.1.0",
-    "solarian-robstride[hardware]>=0.1.0",
 ]
 
 [build-system]
@@ -28,27 +31,29 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["solarian_umi_slim*"]
+include = ["solarian_gripper_1*"]
 
 # Ship the simulation models with the wheel. The assets live inside the package
-# (`solarian_umi_slim/assets/`) so `MJCF_FEETECH_PATH` / `MJCF_ROBSTRIDE_PATH`
+# (`solarian_gripper_1/assets/`) so `MJCF_FEETECH_PATH` / `MJCF_ROBSTRIDE_PATH`
 # resolve from the installed location. Only the runtime files are included --
 # onshape-export byproducts (`*_raw.xml`, `scene.xml`, `meshes/*.part`) are
 # intentionally left out.
 [tool.setuptools.package-data]
-solarian_umi_slim = [
-    "assets/umi_slim.xml",
-    "assets/umi_slim_description/config.json",
-    "assets/umi_slim_description/meshes/*.stl",
-    "assets/umi_slim_robstride.xml",
-    "assets/umi_slim_robstride_description/config.json",
-    "assets/umi_slim_robstride_description/meshes/*.stl",
+solarian_gripper_1 = [
+    "conf_gripper_feetech.yaml",
+    "conf_gripper_robstride.yaml",
+    "assets/gripper1.xml",
+    "assets/gripper1_description/config.json",
+    "assets/gripper1_description/meshes/*.stl",
+    "assets/gripper1_robstride.xml",
+    "assets/gripper1_robstride_description/config.json",
+    "assets/gripper1_robstride_description/meshes/*.stl",
 ]
 
 # Entry points below are managed by `solarian create-plugin`. Each component
 # type you scaffold adds its class(es) here so Solarian can discover them.
 
 [project.entry-points."solarian.modules"]
-umi-slim = "solarian_umi_slim.umi_slim_feetech:UmiSlimFeetechModule"
-umi-slim-feetech = "solarian_umi_slim.umi_slim_feetech:UmiSlimFeetechModule"
-umi-slim-robstride = "solarian_umi_slim.umi_slim_robstride:UmiSlimRobstrideModule"
+gripper-1 = "solarian_gripper_1.gripper_feetech:Gripper1FeetechModule"
+gripper-1-feetech = "solarian_gripper_1.gripper_feetech:Gripper1FeetechModule"
+gripper-1-robstride = "solarian_gripper_1.gripper_robstride:Gripper1RobstrideModule"

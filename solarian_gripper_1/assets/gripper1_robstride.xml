@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mujoco model="umi_slim_robstride">
-  <compiler angle="radian" meshdir="umi_slim_robstride_description/meshes" autolimits="true" inertiafromgeom="auto" inertiagrouprange="3 3" />
+<mujoco model="gripper1_robstride">
+  <compiler angle="radian" meshdir="gripper1_robstride_description/meshes" autolimits="true" inertiafromgeom="auto" inertiagrouprange="3 3" />
   <default>
-    <default class="umi_slim_robstride">
+    <default class="gripper1_robstride">
       <joint frictionloss="0.1" armature="0.005" />
       <position kp="50" dampratio="1" />
       <default class="visual">
@@ -14,7 +14,7 @@
     </default>
   </default>
   <worldbody>
-    <body name="rack" pos="0 0 0" quat="1 0 0 0" childclass="umi_slim_robstride">
+    <body name="rack" pos="0 0 0" quat="1 0 0 0" childclass="gripper1_robstride">
       <geom type="mesh" class="visual" pos="0.134 0.11215 -2.03e-10" quat="0.5 -0.5 -0.5 0.5" mesh="el05_l7" material="el05_l7_material" />
       <geom type="mesh" class="collision" pos="0.134 0.11215 -2.03e-10" quat="0.5 -0.5 -0.5 0.5" mesh="el05_l7" material="el05_l7_material" />
       <geom type="mesh" class="visual" pos="-2.638e-09 0.11215 -0.134" quat="0.707107 0 0 0.707107" mesh="rail" material="rail_material" />
@@ -90,7 +90,7 @@
     <material name="finger_holder_left_n_material" rgba="0.917647 0.917647 0.917647 1" />
   </asset>
   <actuator>
-    <position class="umi_slim_robstride" name="left_manifold_to_rail" joint="left_manifold_to_rail" inheritrange="1" />
+    <position class="gripper1_robstride" name="left_manifold_to_rail" joint="left_manifold_to_rail" inheritrange="1" />
   </actuator>
   <equality>
     <joint joint1="right_manifold_to_rail" joint2="left_manifold_to_rail" polycoef="0 -1.0 0 0 0" />

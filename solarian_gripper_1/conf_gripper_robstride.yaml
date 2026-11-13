@@ -1,4 +1,4 @@
-# Default configuration for UmiSlimRobstrideModule (parallel gripper, one Robstride L7).
+# Default configuration for Gripper1RobstrideModule (parallel gripper, one Robstride L7).
 #
 # Copied into a project's conf/ directory by `solarian add-module`. Commands are
 # given as finger aperture in mm; the module converts to the servo's normalized
@@ -14,7 +14,7 @@ interpolator_type: scalar
 max_speed: 80.0
 
 # Physical finger aperture (fingertip separation) at the ends of travel.
-# Same finger travel as the Feetech UMI-slim: 85 mm fully open.
+# Same finger travel as the Feetech variant: 85 mm fully open.
 aperture_closed_mm: -10.0
 aperture_open_mm: 85.0
 

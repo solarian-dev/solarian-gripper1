@@ -1,4 +1,4 @@
-# Default configuration for UmiSlimFeetechModule (parallel gripper, one Feetech servo).
+# Default configuration for Gripper1FeetechModule (parallel gripper, one Feetech servo).
 #
 # Copied into a project's conf/ directory by `solarian add-module`. Commands are
 # given as finger aperture in mm; the module converts to the servo's normalized

@@ -1,4 +1,4 @@
-"""The Feetech UMI-slim MJCF exports a CAD Frame named ``tcp``."""
+"""The Feetech solarian-gripper1 MJCF exports a CAD Frame named ``tcp``."""
 
 import numpy as np
 import pytest
@@ -6,19 +6,19 @@ import pytest
 
 def test_feetech_mjcf_exports_tcp_site():
     mujoco = pytest.importorskip("mujoco")
-    from solarian_umi_slim import MJCF_FEETECH_PATH
+    from solarian_gripper_1 import MJCF_FEETECH_PATH
 
     model = mujoco.MjModel.from_xml_path(MJCF_FEETECH_PATH)
     sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "tcp")
-    assert sid >= 0, "umi_slim.xml must export a CAD Frame named 'tcp'"
+    assert sid >= 0, "gripper1.xml must export a CAD Frame named 'tcp'"
     flange = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "flange")
-    assert flange >= 0, "umi_slim.xml must export a CAD Frame named 'flange'"
+    assert flange >= 0, "gripper1.xml must export a CAD Frame named 'flange'"
 
 
 def test_tcp_from_flange_matches_mjcf_sites():
     mujoco = pytest.importorskip("mujoco")
-    from solarian_umi_slim import MJCF_FEETECH_PATH
-    from solarian_umi_slim.umi_slim_feetech import UmiSlimFeetechModule
+    from solarian_gripper_1 import MJCF_FEETECH_PATH
+    from solarian_gripper_1.gripper_feetech import Gripper1FeetechModule
 
     model = mujoco.MjModel.from_xml_path(MJCF_FEETECH_PATH)
     fid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "flange")
@@ -40,6 +40,6 @@ def test_tcp_from_flange_matches_mjcf_sites():
     if quat[0] < 0.0:
         quat = -quat
 
-    offset = UmiSlimFeetechModule.tcp_from_flange
+    offset = Gripper1FeetechModule.tcp_from_flange
     assert pos == pytest.approx(offset.pos, abs=1e-6)
     assert quat == pytest.approx(offset.quat, abs=1e-6)

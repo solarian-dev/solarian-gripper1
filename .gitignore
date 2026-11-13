@@ -68,6 +68,6 @@ tmp
 *.log
 
 # onshape-export byproducts (only the cleaned MJCF + meshes/*.stl matter)
-solarian_umi_slim/assets/*_description/*_raw.xml
-solarian_umi_slim/assets/*_description/scene.xml
-solarian_umi_slim/assets/*_description/meshes/*.part
+solarian_gripper_1/assets/*_description/*_raw.xml
+solarian_gripper_1/assets/*_description/scene.xml
+solarian_gripper_1/assets/*_description/meshes/*.part
