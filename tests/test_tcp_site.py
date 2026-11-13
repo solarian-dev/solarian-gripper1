@@ -6,7 +6,7 @@ import pytest
 
 def test_feetech_mjcf_exports_tcp_site():
     mujoco = pytest.importorskip("mujoco")
-    from solarian_gripper_1 import MJCF_FEETECH_PATH
+    from solarian_gripper1 import MJCF_FEETECH_PATH
 
     model = mujoco.MjModel.from_xml_path(MJCF_FEETECH_PATH)
     sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "tcp")
@@ -17,8 +17,8 @@ def test_feetech_mjcf_exports_tcp_site():
 
 def test_tcp_from_flange_matches_mjcf_sites():
     mujoco = pytest.importorskip("mujoco")
-    from solarian_gripper_1 import MJCF_FEETECH_PATH
-    from solarian_gripper_1.gripper_feetech import Gripper1FeetechModule
+    from solarian_gripper1 import MJCF_FEETECH_PATH
+    from solarian_gripper1.gripper_feetech import Gripper1FeetechModule
 
     model = mujoco.MjModel.from_xml_path(MJCF_FEETECH_PATH)
     fid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, "flange")

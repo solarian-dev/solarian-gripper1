@@ -46,16 +46,16 @@ relation). Re-export after a CAD change with:
 
 ```bash
 # Feetech
-solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_description
-solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_description --clean-only
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper1/assets/gripper1_description
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper1/assets/gripper1_description --clean-only
 
 # Robstride
-solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_robstride_description
-solarian onshape-export plugins/solarian-gripper1/solarian_gripper_1/assets/gripper1_robstride_description --clean-only
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper1/assets/gripper1_robstride_description
+solarian onshape-export plugins/solarian-gripper1/solarian_gripper1/assets/gripper1_robstride_description --clean-only
 ```
 
-The Feetech export writes `solarian_gripper_1/assets/gripper1.xml`; the Robstride
-export writes `solarian_gripper_1/assets/gripper1_robstride.xml`. The driven joint
+The Feetech export writes `solarian_gripper1/assets/gripper1.xml`; the Robstride
+export writes `solarian_gripper1/assets/gripper1_robstride.xml`. The driven joint
 `left_manifold_to_rail` has range `[0, 0.0545]` m (0 = fingers apart / open,
 0.0545 = fingers together / closed).
 
@@ -66,8 +66,8 @@ export writes `solarian_gripper_1/assets/gripper1_robstride.xml`. The driven joi
 
 ```python
 from solarian.sim import SceneConfig, ModuleAttachment
-from solarian_gripper_1 import MJCF_FEETECH_PATH as GRIPPER_MJCF
-from solarian_gripper_1.gripper_feetech import Gripper1FeetechModule
+from solarian_gripper1 import MJCF_FEETECH_PATH as GRIPPER_MJCF
+from solarian_gripper1.gripper_feetech import Gripper1FeetechModule
 
 class MyRobot(Robot):
     is_sim = True
@@ -143,7 +143,7 @@ Fields specific to both modules:
 ## License
 
 [Apache License 2.0](LICENSE). Copyright 2026 PrimaryKey Inc. Parts of the
-mechanical design and meshes in `solarian_gripper_1/assets/` are derived from
+mechanical design and meshes in `solarian_gripper1/assets/` are derived from
 the [UMI Gripper](https://cad.onshape.com/documents/a8a98201374f5cc9c6538790)
 and [UMI Soft Finger](https://cad.onshape.com/documents/c8d06048fc2e425772f2749c)
 of the [Universal Manipulation Interface](https://umi-gripper.github.io/) (UMI)

@@ -11,9 +11,9 @@ space, differing only in the driving actuator:
 
 from pathlib import Path
 
-from solarian_gripper_1.aperture import APERTURE_CLOSED_MM, APERTURE_OPEN_MM
+from solarian_gripper1.aperture import APERTURE_CLOSED_MM, APERTURE_OPEN_MM
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 #: Directory holding this plugin's simulation assets (MJCF + meshes). Shipped
 #: inside the package (see ``[tool.setuptools.package-data]`` in

@@ -7,7 +7,7 @@ This product includes software developed by PrimaryKey Inc.
 Third-party designs
 ===================
 
-solarian_gripper_1/assets/
+solarian_gripper1/assets/
   Parts of the solarian-gripper1 mechanical design, meshes and MuJoCo models
   are derived from designs of the Universal Manipulation Interface (UMI)
   project, and modified:
@@ -17,7 +17,7 @@ solarian_gripper_1/assets/
   left_carriage, right_carriage, rack, rail and soft_gripper_finger (both
   variants), and gopro_holder_top and gopro_holder_bottom (Robstride variant).
 
-solarian_gripper_1/assets/gripper1_robstride_description/
+solarian_gripper1/assets/gripper1_robstride_description/
   The Robstride L7 drive is derived from the EDULITE_A3 arm by RobStride
   (https://github.com/RobStride/EDULITE_A3), MIT License, and modified.
   Meshes from that design: el05_l7, l7_base and l7_cover.

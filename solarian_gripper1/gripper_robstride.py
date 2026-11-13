@@ -27,7 +27,7 @@ from pydantic import model_validator
 from solarian.core.gripper_module import GripperConfig, GripperModule
 from solarian.core.data import PosData
 from solarian_robstride.actuator import RobstrideServo
-from solarian_gripper_1.aperture import (
+from solarian_gripper1.aperture import (
     APERTURE_CLOSED_MM,
     APERTURE_OPEN_MM,
     resolve_aperture_limits,
