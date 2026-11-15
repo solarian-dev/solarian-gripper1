@@ -22,12 +22,16 @@ actuators:
         id: 1
         port: ${port}
         mode: range_m100_100
-        # Only this joint is actuated; onshape-to-robot's <equality>
-        # (ratio -1) drives the opposite finger. Prefix must match the
-        # ModuleAttachment prefix in the robot's scene.
+        # One servo drives both jaws. Each joint uses the limits the URDF
+        # exported; the right slide's travel is the mirror of the left.
+        # Prefix must match the ModuleAttachment prefix in the robot's scene.
         sim_joint: "gripper/left_manifold_to_rail"
         sim_range_min: 0 # joint fully open  (fingers apart)
         sim_range_max: 0.0545 # joint fully closed (fingers together)
         # Flip so normalized -100 -> closed (range_max), 100 -> open (range_min),
         # matching aperture_closed_mm / aperture_open_mm.
         sim_drive_mode: 1
+        sim_followers:
+            - joint: "gripper/right_manifold_to_rail"
+              range_min: -0.0545 # closed
+              range_max: 0 # open

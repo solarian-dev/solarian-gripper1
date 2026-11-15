@@ -1,0 +1,8 @@
+density: 522
+kp: 150
+dampratio: 1
+frictionloss: 0.01
+armature: 0.04
+attach: true
+strip_inertials: true
+self_collision: false

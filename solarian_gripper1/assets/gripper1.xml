@@ -3,159 +3,111 @@
   <compiler angle="radian" meshdir="gripper1_description/meshes" autolimits="true" inertiafromgeom="auto" inertiagrouprange="3 3" />
   <default>
     <default class="gripper1">
-      <joint frictionloss="0.1" armature="0.005" />
-      <!-- N/m on the carriage slide: stiff like the real STS3250, so the
-           carriage reaches the command (within ~1 mm) through fingertip drag on
-           the table. The squeeze on an object is set by finger_flex, not this. -->
-      <position kp="5000" dampratio="1" />
-      <!-- Lumped TPU fin-ray compliance: each finger hinges outward about the
-           base of its inner face on a torsion spring, so the carriage keeps
-           closing after the pads meet an object, as on the real gripper. The
-           policies learned from that: real grasps keep closing to a ~20 mm
-           reading, and with rigid fingers the carriages stall at the object
-           width, which the place policy reads (off the finger holders, see
-           screw_hole) as already releasing.
-           A hinge rather than a slide because the real finger's base is clamped
-           to its carriage; only the part out toward the tip gives.
-           4.8 N m/rad is ~400 N/m at a block held near the tips (0.11 m out),
-           tuned, not measured: the reading tracks the command within ~1.5 mm
-           under load (the real gripper's ~0.6 mm), and a 12 g block or 60 g
-           motor stays put through a 6-8 mm partial reopen (the place policy's
-           first chunks). Stiffer only raises the squeeze. -->
-      <default class="finger_flex">
-        <joint type="hinge" axis="0 1 0" stiffness="4.8" damping="0.01" springref="0" frictionloss="0.01" armature="0.0001" />
-      </default>
+      <joint frictionloss="0.01" armature="0.04" />
+      <position kp="150" dampratio="1" />
       <default class="visual">
         <geom type="mesh" contype="0" conaffinity="0" group="2" />
-        <!-- The three screw holes on each finger holder's top face, located by
-             casting the camera rays through the dark holes in a real wrist frame.
-             Real, they are dark marks moving with the fingers, and the place
-             policy reads the opening off them: with the CAD's light bosses it
-             read the sim gripper 10-15 mm wider than its reading and kept
-             opening until the block fell. MuJoCo has no ambient occlusion, so a
-             hole renders as bright as the face around it. -->
-        <default class="screw_hole">
-          <geom type="cylinder" size="0.0018 0.00015" quat="0.707107 0.707107 0 0" material="screw_hole" />
-        </default>
       </default>
       <default class="collision">
         <geom group="3" density="522" contype="2" conaffinity="1" />
-        <!-- Fingers are padded with 3M TB641 gripping material. Its datasheet
-             mu of 3.5 is against its mating 3M material; a Shore 40A elastomer
-             on wood or plastic is ~1-1.5. Priority makes these parameters govern
-             every pad contact instead of being mixed with the other geom's.
-             MuJoCo's default contact (solref 0.02, solimp dmax 0.95) is a spring
-             whose stiffness scales with the bodies' mass: ~500 N/m against a 12 g
-             block, so the pads sank 5-11 mm into the block instead of the
-             fingers flexing. A 0.004 s time constant (2 x timestep, the
-             stiffest MuJoCo allows) with dmax 0.99 is ~100 times stiffer.
-             Torsional friction (m, needs condim 4) is the pad's contact patch
-             resisting a block pivoting about the line between the fingers:
-             ~2/3 of a 15 mm patch radius times mu. -->
-        <default class="finger_pad">
-          <geom condim="4" friction="1.5 0.02 0.0001" priority="1" solref="0.004 1" solimp="0.95 0.99 0.001" />
-        </default>
       </default>
     </default>
   </default>
   <worldbody>
-    <body name="servo" pos="0 0 0" quat="1 0 0 0" childclass="gripper1">
-      <geom type="mesh" class="visual" pos="0.000324139 0.0172383 0.002" quat="1 0 -0 -0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
-      <geom type="mesh" class="collision" pos="0.000324139 0.0172383 0.002" quat="1 0 -0 -0" mesh="camera_mount_so100_top" material="camera_mount_so100_top_material" />
-      <geom type="mesh" class="visual" pos="0 -0.0041 0.0125" quat="0.5 -0.5 0.5 0.5" mesh="servo" material="servo_material" />
-      <geom type="mesh" class="collision" pos="0 -0.0041 0.0125" quat="0.5 -0.5 0.5 0.5" mesh="servo" material="servo_material" />
-      <geom type="mesh" class="visual" pos="-0.04796 0.01645 -0.03064" quat="0.707107 0.707107 -0 -0" mesh="horn_spacer_3_5_mm" material="horn_spacer_3_5_mm_material" />
-      <geom type="mesh" class="collision" pos="-0.04796 0.01645 -0.03064" quat="0.707107 0.707107 -0 -0" mesh="horn_spacer_3_5_mm" material="horn_spacer_3_5_mm_material" />
-      <geom type="mesh" class="visual" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rail" material="rail_material" />
-      <geom type="mesh" class="collision" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rail" material="rail_material" />
-      <geom type="mesh" class="visual" pos="-0 0.0172383 0.002" quat="1 0 0 0" mesh="feetech_camera_mount_bottom" material="feetech_camera_mount_bottom_material" />
-      <geom type="mesh" class="collision" pos="-0 0.0172383 0.002" quat="1 0 0 0" mesh="feetech_camera_mount_bottom" material="feetech_camera_mount_bottom_material" />
-      <geom type="mesh" class="visual" pos="4e-05 -0.01855 0.01266" quat="0.5 0.5 0.5 -0.5" mesh="feetech_back_holder_to_horn" material="feetech_back_holder_to_horn_material" />
-      <geom type="mesh" class="collision" pos="4e-05 -0.01855 0.01266" quat="0.5 0.5 0.5 -0.5" mesh="feetech_back_holder_to_horn" material="feetech_back_holder_to_horn_material" />
-      <geom type="mesh" class="visual" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rack" material="rack_material" />
-      <geom type="mesh" class="collision" pos="-0 0.11165 -0.134" quat="0.707107 0 -0 0.707107" mesh="rack" material="rack_material" />
-      <geom type="mesh" class="visual" pos="0.000323464 0.0201025 0.0892536" quat="0.707107 0.707107 -0 0" mesh="raspberry_pi_hq_camera" material="raspberry_pi_hq_camera_material" />
-      <geom type="mesh" class="collision" pos="0.000323464 0.0201025 0.0892536" quat="0.707107 0.707107 -0 0" mesh="raspberry_pi_hq_camera" material="raspberry_pi_hq_camera_material" />
-      <geom type="mesh" class="visual" pos="0.134 0.11165 -0" quat="0.5 -0.5 -0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
-      <geom type="mesh" class="collision" pos="0.134 0.11165 -0" quat="0.5 -0.5 -0.5 0.5" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
-      <site group="3" name="flange" pos="4e-05 0.00565 0.00016" quat="0 0 0.707107 -0.707107" />
-      <site group="3" name="tcp" pos="0 -0.19259 0" quat="0 0 -0.707107 0.707107" />
-      <site group="3" name="camera" pos="4.13916e-06 -0.00223755 0.0860003" quat="0 0 0.707107 -0.707107" />
-      <body name="right_carriage" pos="-0.085 -0.0578 0.0035" quat="0.5 -0.5 -0.5 0.5">
-        <joint axis="0 0 1" name="right_manifold_to_rail" type="slide" range="-0.054500000000000014 -1.3877787807814457e-17" />
-        <geom type="mesh" class="visual" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
-        <geom type="mesh" class="collision" pos="0.0665 0.0011 -0.0705" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
-        <geom class="screw_hole" pos="-0.0343 -0.0157 -0.0033" />
-        <geom class="screw_hole" pos="-0.0047 -0.0157 -0.0019" />
-        <geom class="screw_hole" pos="-0.0046 -0.0157 -0.0287" />
-        <body name="right_finger">
-          <joint name="right_finger_flex" class="finger_flex" pos="-0.013 0 -0.0305" range="0 0.35" />
-          <geom type="mesh" class="visual" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-          <geom type="box" class="visual" pos="-0.0739 -0.0006 -0.0308" size="0.0609 0.009 0.0003" material="tb641_pad" />
-          <geom type="mesh" class="finger_pad" pos="-0.0114878 -0.0174 -0.030504" quat="0 -0.707107 0 -0.707107" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        </body>
-        <geom type="mesh" class="visual" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 -0" mesh="right_carriage" material="right_carriage_material" />
-        <geom type="mesh" class="collision" pos="0.16945 0.1375 -0.085" quat="0.707107 0.707107 0 -0" mesh="right_carriage" material="right_carriage_material" />
+    <body name="root" pos="0 0 0" quat="1 0 0 0" childclass="gripper1">
+      <geom class="visual" pos="-4.180376e-09 -0.0040999541 0.012500015" quat="0.49999934 -0.50000066 0.50000117 0.49999883" mesh="Servo" material="Servo_material" />
+      <geom class="collision" pos="-4.180376e-09 -0.0040999541 0.012500015" quat="0.49999934 -0.50000066 0.50000117 0.49999883" mesh="Servo" material="Servo_material" />
+      <geom class="visual" pos="-3.1889218e-08 0.012999963 0.0021800852" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="feetech_camera_mount_bottom" material="feetech_camera_mount_bottom_material" />
+      <geom class="collision" pos="-3.1889218e-08 0.012999963 0.0021800852" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="feetech_camera_mount_bottom" material="feetech_camera_mount_bottom_material" />
+      <geom class="visual" pos="4.9964032e-05 0.0089999628 0.0021800854" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="camera_holder_v3" material="camera_holder_v3_material" />
+      <geom class="collision" pos="4.9964032e-05 0.0089999628 0.0021800854" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="camera_holder_v3" material="camera_holder_v3_material" />
+      <geom class="visual" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera" material="Raspberry_Pi_HQ_Camera_material" />
+      <geom class="collision" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera" material="Raspberry_Pi_HQ_Camera_material" />
+      <geom class="visual" pos="0.13399954 0.11165036 -5.4674304e-07" quat="0.49999867 -0.5 -0.49999949 0.50000184" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
+      <geom class="collision" pos="0.13399954 0.11165036 -5.4674304e-07" quat="0.49999867 -0.5 -0.49999949 0.50000184" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
+      <geom class="visual" pos="-1.0918602e-06 0.11164951 -0.13400041" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772" mesh="rack" material="rack_material" />
+      <geom class="collision" pos="-1.0918602e-06 0.11164951 -0.13400041" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772" mesh="rack" material="rack_material" />
+      <geom class="visual" pos="-1.0918602e-06 0.11164951 -0.13400041" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772" mesh="rail" material="rail_material" />
+      <geom class="collision" pos="-1.0918602e-06 0.11164951 -0.13400041" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772" mesh="rail" material="rail_material" />
+      <body name="left_carriage" pos="0.085000003 -0.057799762 0.0034998134" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772">
+        <joint name="left_manifold_to_rail" type="slide" axis="-2.2737e-17 1 -1.26652e-33" range="0 0.0545" />
+        <geom class="visual" pos="0.16945 0.085 -0.1375" quat="1 0 0 0" mesh="left_carriage" material="left_carriage_material" />
+        <geom class="collision" pos="0.16945 0.085 -0.1375" quat="1 0 0 0" mesh="left_carriage" material="left_carriage_material" />
+        <geom class="visual" pos="0.066499661 0.099500262 -0.0011" quat="0.70710548 -1.969399e-17 -1.969405e-17 0.70710808" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
+        <geom class="collision" pos="0.066499661 0.099500262 -0.0011" quat="0.70710548 -1.969399e-17 -1.969405e-17 0.70710808" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
+        <geom class="visual" pos="-0.01648775 -0.0044960433 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.01648775 -0.0044960433 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.051483153 -0.0039270718 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.051483153 -0.0039270718 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.016000061 0.025499958 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.016000061 0.025499958 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.011487821 0.030503962 -0.016200018" quat="-0.49999934 0.50000117 -0.50000066 0.49999883" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="collision" pos="-0.011487821 0.030503962 -0.016200018" quat="-0.49999934 0.50000117 -0.50000066 0.49999883" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="visual" pos="-0.011487821 0.030503962 -0.016200018" quat="-0.49999934 0.50000117 -0.50000066 0.49999883" mesh="finger_pad" material="finger_pad_material" />
+        <geom class="collision" pos="-0.011487821 0.030503962 -0.016200018" quat="-0.49999934 0.50000117 -0.50000066 0.49999883" mesh="finger_pad" material="finger_pad_material" />
       </body>
-      <body name="left_carriage" pos="0.085 -0.0578 0.0035" quat="0.5 -0.5 -0.5 0.5">
-        <joint axis="0 0 1" name="left_manifold_to_rail" type="slide" range="0.0 0.0545" />
-        <geom type="mesh" class="visual" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 -0" mesh="left_carriage" material="left_carriage_material" />
-        <geom type="mesh" class="collision" pos="0.16945 0.1375 0.085" quat="0.707107 0.707107 0 -0" mesh="left_carriage" material="left_carriage_material" />
-        <body name="left_finger">
-          <joint name="left_finger_flex" class="finger_flex" pos="-0.013 0 0.0305" range="-0.35 0" />
-          <geom type="mesh" class="visual" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-          <geom type="box" class="visual" pos="-0.0739 -0.0006 0.0308" size="0.0609 0.009 0.0003" material="tb641_pad" />
-          <geom type="mesh" class="finger_pad" pos="-0.0114878 0.0162 0.030504" quat="0.707107 0 0.707107 -0" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
-        </body>
-        <geom type="mesh" class="visual" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
-        <geom type="mesh" class="collision" pos="0.0665 0.0011 0.0995" quat="0.5 0.5 -0.5 0.5" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
-        <geom class="screw_hole" pos="-0.0363 -0.0157 -0.0027" />
-        <geom class="screw_hole" pos="-0.0054 -0.0157 -0.0037" />
-        <geom class="screw_hole" pos="-0.0047 -0.0157 0.0249" />
+      <body name="right_carriage" pos="-0.084999997 -0.057800213 0.0035006112" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772">
+        <joint name="right_manifold_to_rail" type="slide" axis="-2.2737e-17 1 -1.26652e-33" range="-0.0545 -1.38778e-17" />
+        <geom class="visual" pos="0.16945 -0.085 -0.1375" quat="1 0 0 0" mesh="right_carriage" material="right_carriage_material" />
+        <geom class="collision" pos="0.16945 -0.085 -0.1375" quat="1 0 0 0" mesh="right_carriage" material="right_carriage_material" />
+        <geom class="visual" pos="0.066500232 -0.070499738 -0.0011" quat="0.70710548 -1.9694014e-17 -1.9694097e-17 0.70710808" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
+        <geom class="collision" pos="0.066500232 -0.070499738 -0.0011" quat="0.70710548 -1.9694014e-17 -1.9694097e-17 0.70710808" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
+        <geom class="visual" pos="-0.016487837 0.0044959567 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.016487837 0.0044959567 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.051483235 0.0039267282 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.051483235 0.0039267282 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.015999927 -0.025500042 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.015999927 -0.025500042 0.0149" quat="9.3818615e-07 0.70710714 -0.70710642 -9.3818519e-07" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="collision" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="visual" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="finger_pad" material="finger_pad_material" />
+        <geom class="collision" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="finger_pad" material="finger_pad_material" />
       </body>
+      <site name="camera" group="3" pos="2.4028409e-07 -0.0012996841 0.086000005" quat="5.7768158e-07 -3.8960258e-06 0.70710678 -0.70710678" />
+      <site name="tcp" group="3" pos="3.4181203e-07 -0.19165 7.0396919e-07" quat="5.7768158e-07 -3.8960258e-06 0.70710678 -0.70710678" />
+      <geom class="visual" pos="4.0023278e-05 -0.018549926 0.012660068" quat="0.50000133 0.49999867 0.49999949 -0.50000051" mesh="feetech_back_holder_to_horn" material="feetech_back_holder_to_horn_material" />
+      <geom class="collision" pos="4.0023278e-05 -0.018549926 0.012660068" quat="0.50000133 0.49999867 0.49999949 -0.50000051" mesh="feetech_back_holder_to_horn" material="feetech_back_holder_to_horn_material" />
+      <geom class="visual" pos="-0.047959921 0.016449836 -0.030640237" quat="0.70710808 0.70710548 -7.2097213e-07 1.8763713e-06" mesh="horn_spacer_3_5_mm" material="horn_spacer_3_5_mm_material" />
+      <geom class="collision" pos="-0.047959921 0.016449836 -0.030640237" quat="0.70710808 0.70710548 -7.2097213e-07 1.8763713e-06" mesh="horn_spacer_3_5_mm" material="horn_spacer_3_5_mm_material" />
+      <site name="flange" group="3" pos="3.9983736e-05 0.0056500277 0.00015997925" quat="-2.8145587e-06 -1.6591561e-06 -0.70710548 0.70710808" />
     </body>
   </worldbody>
   <asset>
-    <mesh file="horn_spacer_3_5_mm.stl" />
-    <mesh file="rack.stl" />
+    <mesh file="Servo.stl" />
     <mesh file="feetech_camera_mount_bottom.stl" />
+    <mesh file="camera_holder_v3.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera.stl" />
     <mesh file="feetech_gripper_holder.stl" />
-    <mesh file="raspberry_pi_hq_camera.stl" />
-    <mesh file="camera_mount_so100_top.stl" />
+    <mesh file="rack.stl" />
     <mesh file="rail.stl" />
-    <mesh file="feetech_back_holder_to_horn.stl" />
-    <mesh file="finger_holder_right_n.stl" />
-    <mesh file="finger_holder_left_n.stl" />
-    <mesh file="servo.stl" />
-    <mesh file="soft_gripper_finger.stl" />
-    <mesh file="right_carriage.stl" />
     <mesh file="left_carriage.stl" />
-    <!-- The parts in the wrist camera's view (rack, finger holders, fingers,
-         carriages, pads) take the median colour of each part in a real wrist
-         frame under the arm1 sim lighting, not the CAD export's colours. -->
-    <material name="camera_mount_so100_top_material" rgba="0.8 0.8 0.8 1" />
-    <material name="servo_material" rgba="0.301961 0.301961 0.301961 1" />
-    <material name="horn_spacer_3_5_mm_material" rgba="0.8 0.8 0.8 1" />
-    <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
+    <mesh file="finger_holder_left_n.stl" />
+    <mesh file="screw_cap.stl" />
+    <mesh file="soft_gripper_finger.stl" />
+    <mesh file="finger_pad.stl" />
+    <mesh file="right_carriage.stl" />
+    <mesh file="finger_holder_right_n.stl" />
+    <mesh file="feetech_back_holder_to_horn.stl" />
+    <mesh file="horn_spacer_3_5_mm.stl" />
+    <material name="Servo_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="feetech_camera_mount_bottom_material" rgba="0.917647 0.917647 0.917647 1" />
-    <material name="feetech_back_holder_to_horn_material" rgba="0.8 0.8 0.8 1" />
-    <material name="rack_material" rgba="0.39 0.45 0.6 1" />
-    <material name="raspberry_pi_hq_camera_material" rgba="0.172549 0.188235 0.203922 1" />
+    <material name="camera_holder_v3_material" rgba="0.917647 0.917647 0.917647 1" />
+    <material name="Raspberry_Pi_HQ_Camera_material" rgba="0.172549 0.188235 0.203922 1" />
     <material name="feetech_gripper_holder_material" rgba="0.301961 0.301961 0.301961 1" />
-    <material name="finger_holder_right_n_material" rgba="1 0.95 0.9 1" emission="0.07" />
-    <material name="soft_gripper_finger_material" rgba="1 0.27 0.024 1" />
-    <material name="right_carriage_material" rgba="0.9 1 1 1" />
-    <material name="left_carriage_material" rgba="0.9 1 1 1" />
-    <material name="finger_holder_left_n_material" rgba="1 0.95 0.9 1" emission="0.07" />
-    <!-- The 3M TB641 strip on each finger's inner face, dark in every real
-         wrist frame along the gap between the fingers. -->
-    <material name="tb641_pad" rgba="0.35 0.42 0.38 1" />
-    <material name="screw_hole" rgba="0.08 0.08 0.08 1" />
+    <material name="rack_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
+    <material name="left_carriage_material" rgba="0.8 0.8 0.8 1" />
+    <material name="finger_holder_left_n_material" rgba="0.917647 0.917647 0.917647 1" />
+    <material name="screw_cap_material" rgba="0 0 0 1" />
+    <material name="soft_gripper_finger_material" rgba="0.870588 0.0784314 0 1" />
+    <material name="finger_pad_material" rgba="0 0 0 1" />
+    <material name="right_carriage_material" rgba="0.8 0.8 0.8 1" />
+    <material name="finger_holder_right_n_material" rgba="0.917647 0.917647 0.917647 1" />
+    <material name="feetech_back_holder_to_horn_material" rgba="0.8 0.8 0.8 1" />
+    <material name="horn_spacer_3_5_mm_material" rgba="0.8 0.8 0.8 1" />
   </asset>
   <actuator>
     <position class="gripper1" name="left_manifold_to_rail" joint="left_manifold_to_rail" inheritrange="1" />
+    <position class="gripper1" name="right_manifold_to_rail" joint="right_manifold_to_rail" inheritrange="1" />
   </actuator>
-  <equality>
-    <joint joint1="right_manifold_to_rail" joint2="left_manifold_to_rail" polycoef="0 -1.0 0 0 0" />
-  </equality>
 </mujoco>
