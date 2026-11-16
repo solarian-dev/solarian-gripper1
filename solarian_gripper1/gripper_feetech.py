@@ -66,11 +66,11 @@ class Gripper1FeetechConfig(GripperConfig):
 class Gripper1FeetechModule(GripperModule):
     config_class = Gripper1FeetechConfig
 
-    # CAD ``tcp`` in the mate ``flange`` frame (gripper1.xml sibling sites).
-    # Identity rotation: both sites share the same quat; TCP is +Z of flange.
+    # CAD ``tcp`` in the ``flange`` frame (gripper1.xml). test_tcp_site
+    # requires these to match the sites to 1e-6, so the quat stays unrounded.
     tcp_from_flange = FrameOffset(
-        pos=(0.0, 0.0, 0.19824),
-        quat=(1.0, 0.0, 0.0, 0.0),
+        pos=(0.000039965, 0.000160000, 0.197300027),
+        quat=(1.0, -1.8385e-06, -2.3464e-06, -5.5098e-06),
     )
 
     # Single logical actuator, matching the single physical Feetech servo.

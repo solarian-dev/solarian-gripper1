@@ -24,6 +24,7 @@ from pydantic import model_validator
 
 from solarian.core.gripper_module import GripperConfig, GripperModule
 from solarian.core.data import PosData
+from solarian.core.ik import FrameOffset
 from solarian_robstride.actuator import RobstrideServo
 from solarian_gripper1.aperture import (
     APERTURE_CLOSED_MM,
@@ -56,6 +57,13 @@ class Gripper1RobstrideConfig(GripperConfig):
 
 class Gripper1RobstrideModule(GripperModule):
     config_class = Gripper1RobstrideConfig
+
+    # CAD ``tcp`` in the ``flange`` frame (gripper1_robstride.xml). +Z of flange.
+    # test_tcp_site checks these against the sites to 1e-6.
+    tcp_from_flange = FrameOffset(
+        pos=(0.0, 0.0, 0.21415),
+        quat=(1.0, 0.0, 0.0, 0.0),
+    )
 
     # Single logical actuator, matching the single physical Robstride L7.
     # Declared so the core scalar interpolator knows which field to drive.

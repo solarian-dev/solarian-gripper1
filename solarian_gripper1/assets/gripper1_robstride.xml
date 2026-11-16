@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="gripper1_robstride">
+  <compiler angle="radian" meshdir="gripper1_robstride_description/meshes" autolimits="true" inertiafromgeom="auto" inertiagrouprange="3 3" />
+  <default>
+    <default class="gripper1_robstride">
+      <joint frictionloss="0.01" armature="0.04" />
+      <position kp="150" dampratio="1" />
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2" />
+      </default>
+      <default class="collision">
+        <geom group="3" density="522" contype="2" conaffinity="1" />
+      </default>
+    </default>
+  </default>
+  <worldbody>
+    <body name="root" pos="0 0 0" quat="1 0 0 0" childclass="gripper1_robstride">
+      <geom class="visual" pos="-3.2746623e-07 0.08915 -0.134" quat="0.70710548 -4.3016555e-40 4.3016419e-40 0.70710808" mesh="L7_base" material="L7_base_material" />
+      <geom class="collision" pos="-3.2746623e-07 0.08915 -0.134" quat="0.70710548 -4.3016555e-40 4.3016419e-40 0.70710808" mesh="L7_base" material="L7_base_material" />
+      <geom class="visual" pos="-3.2746623e-07 0.08915 -0.134" quat="0.70710548 1.6951122e-30 1.6951184e-30 0.70710808" mesh="L7_cover" material="L7_cover_material" />
+      <geom class="collision" pos="-3.2746623e-07 0.08915 -0.134" quat="0.70710548 1.6951122e-30 1.6951184e-30 0.70710808" mesh="L7_cover" material="L7_cover_material" />
+      <geom class="visual" pos="0.13399984 0.089150492 4.5632238e-07" quat="-0.49999816 0.5 0.50000184 -0.5" mesh="EL05_L7" material="EL05_L7_material" />
+      <geom class="collision" pos="0.13399984 0.089150492 4.5632238e-07" quat="-0.49999816 0.5 0.50000184 -0.5" mesh="EL05_L7" material="EL05_L7_material" />
+      <geom class="visual" pos="-3.4276007e-07 0.08915 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="rack" material="rack_material" />
+      <geom class="collision" pos="-3.4276007e-07 0.08915 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="rack" material="rack_material" />
+      <geom class="visual" pos="-3.8500193e-07 0.10065 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="gopro_holder_top" material="gopro_holder_top_material" />
+      <geom class="collision" pos="-3.8500193e-07 0.10065 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="gopro_holder_top" material="gopro_holder_top_material" />
+      <geom class="visual" pos="-2.7047995e-08 -0.011500054 4.1123542e-09" quat="1 -2.7851298e-17 -7.8135012e-18 -4.1984882e-17" mesh="camera_mount" material="camera_mount_material" />
+      <geom class="collision" pos="-2.7047995e-08 -0.011500054 4.1123542e-09" quat="1 -2.7851298e-17 -7.8135012e-18 -4.1984882e-17" mesh="camera_mount" material="camera_mount_material" />
+      <geom class="visual" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___board" material="Raspberry_Pi_HQ_Camera___board_material" />
+      <geom class="collision" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___board" material="Raspberry_Pi_HQ_Camera___board_material" />
+      <site name="fastened_1" group="3" pos="0.00027347295 -0.0044857144 0.068303613" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" />
+      <geom class="visual" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___lens_holder" material="Raspberry_Pi_HQ_Camera___lens_holder_material" />
+      <geom class="collision" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___lens_holder" material="Raspberry_Pi_HQ_Camera___lens_holder_material" />
+      <geom class="visual" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___sensor" material="Raspberry_Pi_HQ_Camera___sensor_material" />
+      <geom class="collision" pos="0.00027347295 -0.008635784 0.087253598" quat="0.70710548 0.70710808 -3.5212705e-17 -2.4162936e-17" mesh="Raspberry_Pi_HQ_Camera___sensor" material="Raspberry_Pi_HQ_Camera___sensor_material" />
+      <geom class="visual" pos="-3.8500193e-07 0.10065 -0.133" quat="0.70710548 -3.9387934e-17 3.9387862e-17 0.70710808" mesh="gopro_holder_bottom" material="gopro_holder_bottom_material" />
+      <geom class="collision" pos="-3.8500193e-07 0.10065 -0.133" quat="0.70710548 -3.9387934e-17 3.9387862e-17 0.70710808" mesh="gopro_holder_bottom" material="gopro_holder_bottom_material" />
+      <geom class="visual" pos="-3.4276007e-07 0.08915 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="rail" material="rail_material" />
+      <geom class="collision" pos="-3.4276007e-07 0.08915 -0.134" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808" mesh="rail" material="rail_material" />
+      <body name="left_carriage" pos="0.08500028 -0.080299688 0.0035000041" quat="0.70710548 -1.9693878e-17 1.9693878e-17 0.70710808">
+        <joint name="left_manifold_to_rail" type="slide" axis="-2.2737e-17 1 -1.26652e-33" range="0 0.0545" />
+        <geom class="visual" pos="0.16945 0.085 -0.1375" quat="1 0 0 0" mesh="left_carriage" material="left_carriage_material" />
+        <geom class="collision" pos="0.16945 0.085 -0.1375" quat="1 0 0 0" mesh="left_carriage" material="left_carriage_material" />
+        <geom class="visual" pos="0.066499661 0.099500262 -0.0011" quat="0.70710548 -1.9693984e-17 -1.9694055e-17 0.70710808" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
+        <geom class="collision" pos="0.066499661 0.099500262 -0.0011" quat="0.70710548 -1.9693984e-17 -1.9694055e-17 0.70710808" mesh="finger_holder_left_n" material="finger_holder_left_n_material" />
+        <geom class="visual" pos="-0.051483159 -0.0039270718 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.051483159 -0.0039270718 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.016487757 -0.0044960433 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.016487757 -0.0044960433 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.016000067 0.025499958 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.016000067 0.025499958 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.011488007 0.030503988 -0.016200018" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="collision" pos="-0.011488007 0.030503988 -0.016200018" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+      </body>
+      <body name="right_carriage" pos="-0.08499972 -0.080300312 0.0035000041" quat="0.70710548 2.1804174e-17 -2.1804022e-17 0.70710808">
+        <joint name="right_manifold_to_rail" type="slide" axis="-2.2737e-17 1 -1.26652e-33" range="-0.0545 0" />
+        <geom class="visual" pos="0.16945 -0.085 -0.1375" quat="1 0 0 0" mesh="right_carriage" material="right_carriage_material" />
+        <geom class="collision" pos="0.16945 -0.085 -0.1375" quat="1 0 0 0" mesh="right_carriage" material="right_carriage_material" />
+        <geom class="visual" pos="0.066500232 -0.070499738 -0.0011" quat="0.70710548 -1.9693982e-17 -1.9694058e-17 0.70710808" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
+        <geom class="collision" pos="0.066500232 -0.070499738 -0.0011" quat="0.70710548 -1.9693982e-17 -1.9694058e-17 0.70710808" mesh="finger_holder_right_n" material="finger_holder_right_n_material" />
+        <geom class="visual" pos="-0.051483241 0.0039267282 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.051483241 0.0039267282 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.015999933 -0.025500042 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.015999933 -0.025500042 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.016487843 0.0044959567 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="collision" pos="-0.016487843 0.0044959567 0.0125" quat="0.50000066 -0.5000025 0.49999934 -0.4999975" mesh="screw_cap" material="screw_cap_material" />
+        <geom class="visual" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+        <geom class="collision" pos="-0.01148762 -0.030504025 0.017399982" quat="0.49999816 0.5 0.50000184 0.5" mesh="soft_gripper_finger" material="soft_gripper_finger_material" />
+      </body>
+      <site name="camera" group="3" pos="7.2128444e-08 -0.0238 0.086000004" quat="2.5973435e-06 -2.597353e-06 0.70710808 -0.70710548" />
+      <site name="tcp" group="3" pos="7.7132304e-07 -0.21415 4.1123542e-09" quat="2.5973435e-06 -2.597353e-06 0.70710808 -0.70710548" />
+      <site name="flange" group="3" pos="-3.37024e-19 -1.2379583e-24 -6.14919e-22" quat="2.5973435e-06 -2.597353e-06 0.70710808 -0.70710548" />
+    </body>
+  </worldbody>
+  <asset>
+    <mesh file="L7_base.stl" />
+    <mesh file="L7_cover.stl" />
+    <mesh file="EL05_L7.stl" />
+    <mesh file="rack.stl" />
+    <mesh file="gopro_holder_top.stl" />
+    <mesh file="camera_mount.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___board.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___lens_holder.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___sensor.stl" />
+    <mesh file="gopro_holder_bottom.stl" />
+    <mesh file="rail.stl" />
+    <mesh file="left_carriage.stl" />
+    <mesh file="finger_holder_left_n.stl" />
+    <mesh file="screw_cap.stl" />
+    <mesh file="soft_gripper_finger.stl" />
+    <mesh file="right_carriage.stl" />
+    <mesh file="finger_holder_right_n.stl" />
+    <material name="L7_base_material" rgba="0.301961 0.290196 0.262745 1" />
+    <material name="L7_cover_material" rgba="0.301961 0.290196 0.262745 1" />
+    <material name="EL05_L7_material" rgba="0.301961 0.290196 0.262745 1" />
+    <material name="rack_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="gopro_holder_top_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="camera_mount_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="Raspberry_Pi_HQ_Camera___board_material" rgba="0.172549 0.188235 0.203922 1" />
+    <material name="Raspberry_Pi_HQ_Camera___lens_holder_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="Raspberry_Pi_HQ_Camera___sensor_material" rgba="0.231373 0.380392 0.705882 1" />
+    <material name="gopro_holder_bottom_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
+    <material name="left_carriage_material" rgba="0.615686 0.811765 0.929412 1" />
+    <material name="finger_holder_left_n_material" rgba="0.917647 0.917647 0.917647 1" />
+    <material name="screw_cap_material" rgba="0 0 0 1" />
+    <material name="soft_gripper_finger_material" rgba="0.870588 0.0784314 0 1" />
+    <material name="right_carriage_material" rgba="0.615686 0.811765 0.929412 1" />
+    <material name="finger_holder_right_n_material" rgba="0.917647 0.917647 0.917647 1" />
+  </asset>
+  <actuator>
+    <position class="gripper1_robstride" name="left_manifold_to_rail" joint="left_manifold_to_rail" inheritrange="1" />
+    <position class="gripper1_robstride" name="right_manifold_to_rail" joint="right_manifold_to_rail" inheritrange="1" />
+  </actuator>
+</mujoco>

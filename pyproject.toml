@@ -1,6 +1,6 @@
 [project]
 name = "solarian-gripper1"
-version = "0.2.1"
+version = "0.3.0"
 description = "solarian-gripper1, a single-actuator parallel gripper with a wrist camera, designed with reference to UMI"
 authors = [
     {name = "Raul Garreta", email = "raul@solarian.dev"}
@@ -10,7 +10,7 @@ license = {text = "Apache-2.0"}
 classifiers = ["License :: OSI Approved :: Apache Software License"]
 requires-python = ">=3.10"
 dependencies = [
-    "solarian>=0.3.0",
+    "solarian>=0.4.0",
     "solarian-feetech>=0.1.0",
 ]
 
@@ -43,10 +43,10 @@ solarian_gripper1 = [
     "conf_gripper_feetech.yaml",
     "conf_gripper_robstride.yaml",
     "assets/gripper1.xml",
-    "assets/gripper1_description/config.json",
+    "assets/gripper1_description/config.yaml",
     "assets/gripper1_description/meshes/*.stl",
     "assets/gripper1_robstride.xml",
-    "assets/gripper1_robstride_description/config.json",
+    "assets/gripper1_robstride_description/config.yaml",
     "assets/gripper1_robstride_description/meshes/*.stl",
 ]
 

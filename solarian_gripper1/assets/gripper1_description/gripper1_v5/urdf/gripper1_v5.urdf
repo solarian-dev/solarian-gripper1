@@ -192,19 +192,52 @@
             </material>
         </visual>
     </link>
-    <link name="raspberry_pi_hq_camera">
+    <link name="raspberry_pi_hq_camera__1_" />
+    <link name="raspberry_pi_hq_camera___board">
         <inertial>
-            <mass value="6.74053e-06" />
-            <origin xyz="5.90742e-19 0.0182287 0.00685608" rpy="0 -0 0" />
-            <inertia ixx="7.44576e-10" ixy="0" ixz="0" iyy="6.80175e-10" iyz="-2.7134e-11" izz="1.1793e-09" />
+            <mass value="3.01783e-06" />
+            <origin xyz="-3.59386e-19 0.017339 0.00363081" rpy="0 -0 0" />
+            <inertia ixx="3.65374e-10" ixy="0" ixz="0" iyy="3.05342e-10" iyz="-1.14534e-11" izz="6.55806e-10" />
         </inertial>
         <visual>
             <origin xyz="0 0.01895 0.00415" rpy="0 -0 0" />
             <geometry>
-                <mesh filename="package://gripper1_v5/meshes/Raspberry_Pi_HQ_Camera.stl" scale="1 1 1" />
+                <mesh filename="package://gripper1_v5/meshes/Raspberry_Pi_HQ_Camera___board.stl" scale="1 1 1" />
             </geometry>
             <material name="0.172549_0.188235_0.203922_0.000000_0.000000">
                 <color rgba="0.172549 0.188235 0.203922 1" />
+            </material>
+        </visual>
+    </link>
+    <link name="raspberry_pi_hq_camera___lens_holder">
+        <inertial>
+            <mass value="3.13644e-06" />
+            <origin xyz="1.40108e-18 -0.00665 0.00521347" rpy="0 -0 0" />
+            <inertia ixx="2.80989e-10" ixy="0" ixz="0" iyy="2.80989e-10" iyz="0" izz="4.68292e-10" />
+        </inertial>
+        <visual>
+            <origin xyz="0 -0.00665 -0.005" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://gripper1_v5/meshes/Raspberry_Pi_HQ_Camera___lens_holder.stl" scale="1 1 1" />
+            </geometry>
+            <material name="0.301961_0.301961_0.301961_0.000000_0.000000">
+                <color rgba="0.301961 0.301961 0.301961 1" />
+            </material>
+        </visual>
+    </link>
+    <link name="raspberry_pi_hq_camera___sensor">
+        <inertial>
+            <mass value="2.96243e-08" />
+            <origin xyz="5.10227e-19 -8.78987e-20 0.0005" rpy="0 -0 0" />
+            <inertia ixx="5.7281e-14" ixy="0" ixz="0" iyy="1.00047e-13" iyz="0" izz="1.52391e-13" />
+        </inertial>
+        <visual>
+            <origin xyz="3.98537e-19 -8.66281e-20 0" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://gripper1_v5/meshes/Raspberry_Pi_HQ_Camera___sensor.stl" scale="1 1 1" />
+            </geometry>
+            <material name="0.231373_0.380392_0.705882_0.000000_0.000000">
+                <color rgba="0.231373 0.380392 0.705882 1" />
             </material>
         </visual>
     </link>
@@ -485,11 +518,23 @@
         <child link="right_carriage" />
         <limit effort="1" velocity="1" lower="-0.0545" upper="-1.38778e-17" />
     </joint>
+    <joint name="fastened_1" type="fixed">
+        <origin xyz="5.31937e-18 0 2.77556e-17" rpy="0 -0 0" />
+        <axis xyz="-0 -0 1" />
+        <parent link="raspberry_pi_hq_camera___board" />
+        <child link="raspberry_pi_hq_camera__1_" />
+    </joint>
     <joint name="fastened_8" type="fixed">
         <origin xyz="0 0 0" rpy="0 1.5708 -4.71239" />
         <axis xyz="0 0 1" />
         <parent link="root" />
         <child link="servo" />
+    </joint>
+    <joint name="fix_camera" type="fixed">
+        <origin xyz="0.005 0.00931418 0.0232536" rpy="1.5708 -0 0" />
+        <axis xyz="0 0 -1" />
+        <parent link="camera_holder_v3" />
+        <child link="raspberry_pi_hq_camera___board" />
     </joint>
     <joint name="fix_camera_holder_bottom_to_servo" type="fixed">
         <origin xyz="0.01011 -1.66483e-18 -0.0232" rpy="1.5708 -1.11022e-16 -1.5708" />
@@ -502,12 +547,6 @@
         <axis xyz="-1 0 0" />
         <parent link="feetech_camera_mount_bottom" />
         <child link="camera_holder_v3" />
-    </joint>
-    <joint name="fix_camera_to_holder" type="fixed">
-        <origin xyz="0.005 0.00931418 0.0232536" rpy="1.5708 -1.70813e-33 -1.15864e-30" />
-        <axis xyz="0 0 -1" />
-        <parent link="camera_holder_v3" />
-        <child link="raspberry_pi_hq_camera" />
     </joint>
     <joint name="fix_gripper_holder_to_servo" type="fixed">
         <origin xyz="-0.03511 -2.77556e-17 -0.03565" rpy="0 -1.5708 4.71239" />
@@ -532,6 +571,12 @@
         <axis xyz="1 0 0" />
         <parent link="soft_gripper_finger" />
         <child link="finger_pad_1" />
+    </joint>
+    <joint name="fix_lens_holder_to_board" type="fixed">
+        <origin xyz="0 0.0256 0.00915" rpy="0 -0 0" />
+        <axis xyz="0 0 -1" />
+        <parent link="raspberry_pi_hq_camera___board" />
+        <child link="raspberry_pi_hq_camera___lens_holder" />
     </joint>
     <joint name="fix_rack_to_gripper_holder" type="fixed">
         <origin xyz="-0.00385 0.03511 -7.41074e-19" rpy="1.5708 -1.88977e-31 1.34762e-30" />
@@ -592,6 +637,12 @@
         <axis xyz="0 0 1" />
         <parent link="finger_holder_right_n" />
         <child link="screw_cap_3" />
+    </joint>
+    <joint name="fix_sensor_to_board" type="fixed">
+        <origin xyz="-3.998e-19 0.01895 0.00415" rpy="0 -0 0" />
+        <axis xyz="0 0 -1" />
+        <parent link="raspberry_pi_hq_camera___board" />
+        <child link="raspberry_pi_hq_camera___sensor" />
     </joint>
     <joint name="fix_servo_holder_to_servo" type="fixed">
         <origin xyz="-0.03296 0.01021 -0.00265" rpy="3.14159 -0 0" />

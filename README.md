@@ -79,13 +79,13 @@ class MyRobot(Robot):
 ```
 
 For the Robstride variant, import `Gripper1RobstrideModule` and
-`MJCF_ROBSTRIDE_PATH` instead. The Feetech MJCF attaches at the `flange` site;
-the Robstride MJCF attaches at the `base` site.
+`MJCF_ROBSTRIDE_PATH` instead. Both MJCFs attach at the `flange` site.
 
-The Feetech MJCF exports CAD Frames as sites: `flange` (mate to the arm),
+Both MJCFs export CAD Frames as sites: `flange` (mate to the arm),
 `camera` (wrist lens), and `tcp` (tool center point). Pass
-`Gripper1FeetechModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
-the flange plus that CAD offset.
+`Gripper1FeetechModule.tcp_from_flange` or
+`Gripper1RobstrideModule.tcp_from_flange` to the arm as `ik_tcp` so IK tracks
+that variant's flange plus its CAD offset.
 
 Site-mate example (solarian-arm1 and this gripper both export a `flange` Frame):
 

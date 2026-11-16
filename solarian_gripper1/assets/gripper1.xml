@@ -21,8 +21,13 @@
       <geom class="collision" pos="-3.1889218e-08 0.012999963 0.0021800852" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="feetech_camera_mount_bottom" material="feetech_camera_mount_bottom_material" />
       <geom class="visual" pos="4.9964032e-05 0.0089999628 0.0021800854" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="camera_holder_v3" material="camera_holder_v3_material" />
       <geom class="collision" pos="4.9964032e-05 0.0089999628 0.0021800854" quat="1 -9.3631404e-13 -1.8366026e-06 -5.0980091e-07" mesh="camera_holder_v3" material="camera_holder_v3_material" />
-      <geom class="visual" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera" material="Raspberry_Pi_HQ_Camera_material" />
-      <geom class="collision" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera" material="Raspberry_Pi_HQ_Camera_material" />
+      <geom class="visual" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___board" material="Raspberry_Pi_HQ_Camera___board_material" />
+      <geom class="collision" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___board" material="Raspberry_Pi_HQ_Camera___board_material" />
+      <site name="fastened_1" group="3" pos="4.9722514e-05 0.018014143 0.070433685" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" />
+      <geom class="visual" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___lens_holder" material="Raspberry_Pi_HQ_Camera___lens_holder_material" />
+      <geom class="collision" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___lens_holder" material="Raspberry_Pi_HQ_Camera___lens_holder_material" />
+      <geom class="visual" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___sensor" material="Raspberry_Pi_HQ_Camera___sensor_material" />
+      <geom class="collision" pos="4.9648675e-05 0.013864073 0.08938367" quat="0.70710548 0.70710808 -1.6591561e-06 9.3819349e-07" mesh="Raspberry_Pi_HQ_Camera___sensor" material="Raspberry_Pi_HQ_Camera___sensor_material" />
       <geom class="visual" pos="0.13399954 0.11165036 -5.4674304e-07" quat="0.49999867 -0.5 -0.49999949 0.50000184" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
       <geom class="collision" pos="0.13399954 0.11165036 -5.4674304e-07" quat="0.49999867 -0.5 -0.49999949 0.50000184" mesh="feetech_gripper_holder" material="feetech_gripper_holder_material" />
       <geom class="visual" pos="-1.0918602e-06 0.11164951 -0.13400041" quat="0.70710584 3.6049062e-07 2.9578406e-06 0.70710772" mesh="rack" material="rack_material" />
@@ -76,7 +81,9 @@
     <mesh file="Servo.stl" />
     <mesh file="feetech_camera_mount_bottom.stl" />
     <mesh file="camera_holder_v3.stl" />
-    <mesh file="Raspberry_Pi_HQ_Camera.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___board.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___lens_holder.stl" />
+    <mesh file="Raspberry_Pi_HQ_Camera___sensor.stl" />
     <mesh file="feetech_gripper_holder.stl" />
     <mesh file="rack.stl" />
     <mesh file="rail.stl" />
@@ -92,7 +99,9 @@
     <material name="Servo_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="feetech_camera_mount_bottom_material" rgba="0.917647 0.917647 0.917647 1" />
     <material name="camera_holder_v3_material" rgba="0.917647 0.917647 0.917647 1" />
-    <material name="Raspberry_Pi_HQ_Camera_material" rgba="0.172549 0.188235 0.203922 1" />
+    <material name="Raspberry_Pi_HQ_Camera___board_material" rgba="0.172549 0.188235 0.203922 1" />
+    <material name="Raspberry_Pi_HQ_Camera___lens_holder_material" rgba="0.301961 0.301961 0.301961 1" />
+    <material name="Raspberry_Pi_HQ_Camera___sensor_material" rgba="0.231373 0.380392 0.705882 1" />
     <material name="feetech_gripper_holder_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="rack_material" rgba="0.301961 0.301961 0.301961 1" />
     <material name="rail_material" rgba="0.647059 0.647059 0.647059 1" />
