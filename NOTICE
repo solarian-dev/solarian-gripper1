@@ -22,6 +22,12 @@ solarian_gripper1/assets/gripper1_robstride_description/
   (https://github.com/RobStride/EDULITE_A3), MIT License, and modified.
   Meshes from that design: el05_l7, l7_base and l7_cover.
 
+STL/, STEP/, docs/media/ and tools/assembly_render/cad/
+  Print-ready parts, CAD export and renders of the Feetech variant. They
+  contain the UMI-derived parts listed above, and crank, link-1 and link-2
+  of the drive linkage, which are derived from the EDULITE_A3 gripper by
+  RobStride (MIT License, reproduced below), and modified.
+
   MIT License
 
   Copyright (c) 2026 RobStride
